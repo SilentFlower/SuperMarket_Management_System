@@ -63,4 +63,13 @@ public interface SupplierGoodsDao {
 
     @Update("update supply_goods set sg_paid = true where sg_id = #{sg_id}")
     public Integer pay_supplierGoodss(Integer sg_id);
+
+    @Select("select * from supply_goods where s_id = #{s_id} and sg_paid = false")
+    @Results({
+            @Result(property = "g_id",column = "g_id"),
+            @Result(property = "s_id",column = "s_id"),
+            @Result(property = "goods",column = "g_id", one = @One(select = "Dao.GoodsDao.findById")),
+            @Result(property = "supplier",column = "s_id", one = @One(select = "Dao.SupplierDao.findById"))
+    })
+    public List<SupplierGoods> getUnpaidBy_s_id(Integer s_id);
 }

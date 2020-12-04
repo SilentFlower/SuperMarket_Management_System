@@ -104,13 +104,6 @@
             table-layout:fixed;
         }
 
-        .addr,.emi,.bankcard{
-            width: 100px;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-
-        }
 
         thead th{
             font-size: 16px;
@@ -201,7 +194,9 @@
                         <ul class="breadcrumb">
                             <li><a href="${pageContext.request.contextPath}/utils/goHome">首页</a></li>
                             <li class="active">进货管理</li>
-                            <li class="active"><a href="${pageContext.request.contextPath}/supplier/get_supplierBill">采购进货</a></li>
+                            <li class="active"><a href="${pageContext.request.contextPath}/supplier/get_supplierBill">供货商账务
+
+                            </a></li>
                         </ul>
                     </div>
                 </div>
@@ -335,16 +330,57 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="pay">支付确认</h4>
+                    <h4 class="modal-title" id="pay">订单生成</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-danger" role="alert">
-                        正在生成订单
+
+                    <div id="table2">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="col-md-1"><input type="checkbox" checked="true" id="allCheck2"><span style="margin-left: 5px"></span></th>
+                                <th class="col-md-2">进货商品名</th>
+                                <th class="col-md-2">商品种类</th>
+                                <th class="col-md-2">供货商</th>
+                                <th class="col-md-2">进货数量</th>
+                                <th class="col-md-2">进货价格</th>
+                                <th class="col-md-2">进货时间</th>
+                                <th class="col-md-2">是否支付</th>
+                            </tr>
+                            </thead>
+                            <tbody id="supplierGoods">
+                            </tbody>
+                        </table>
                     </div>
+
+                    <style>
+
+                        #table2{
+                            height: auto;
+                            padding: 20px 12px 0px 12px;
+                            display: flex;
+                            overflow: auto;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        #table2 table{
+                            border: none;
+                            padding: 0 0 0 0;
+                            align-items: center;
+                        }
+
+                        #table2 th{
+                            font-size: 12px;
+
+                        }
+
+                    </style>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-danger" id="Topay">提交请求</button>
+                    <button type="button" class="btn btn-danger" id="Topay">支付订单</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -370,6 +406,7 @@
             page();
             getSupplier_bill();
             getSupplier();
+            getKey();
         });
 
         function submit() {
@@ -414,6 +451,52 @@
             $("#Pagination ul").html(page);
         }
 
+        function getKey() {
+            var keys = ${supplier_bill_key};
+            var k = JSON.stringify(keys);
+            console.log(k);
+            $("#submit input").eq(0).prop("value",k);
+            var key;
+            var value;
+            var start = "";
+            var end = "";
+            for(var name in keys){
+                if(keys[name] != null && name != "sb_start" && name != "sb_end"){
+                    if(name == "sb_all_amount"){
+                        key = "总金额";
+                    }else if(name == "sb_paid_amount"){
+                        key = "支付金额";
+                    }else if(name == "sb_unPaid_amount"){
+                        key = "未支付金额";
+                    }else if(name == "supplier"){
+                        key = "供货商";
+                    }
+                    if(name == "sb_start_string"){
+                        key = "时间段";
+                        start = keys[name];
+                        cho.push(key);
+                        continue;
+                    }
+                    if(name == "sb_end_string"){
+                        end = keys[name];
+                        continue;
+                    }
+
+                    if(name == "supplier"){
+                        value = keys[name].supplier_name;
+                    }else{
+                        value = keys[name];
+                    }
+                    cho.push(key);
+                    addKey1(key, value);
+
+                }
+            }
+            if(typeof start != "undefined" && start != null && start != ""){
+                addKey2("时间段", start, end);
+            }
+        }
+
         function getSupplier_bill(){
             var supplier_bill = ${supplier_bill};
             var w = $("#supplier_bill");
@@ -423,9 +506,9 @@
                 if(item.sb_start_string != null && item.sb_end_string != null){
                     value = item.sb_start_string + ' - ' + item.sb_end_string;
                 }else if(item.sb_start_string != null){
-                    value = item.sb_start_string + ' - ';
+                    value = item.sb_start_string + ' - 至今';
                 }else if(item.sb_end_string != null){
-                    value = ' - ' + item.sb_end_string;
+                    value = '从前 - ' + item.sb_end_string;
                 }else{
                     value = "未设置筛选时间";
                 }
@@ -437,8 +520,9 @@
                     '            <td>'+item.sb_unPaid_amount+'</td>\n' +
                     '            <td>'+value+'</td>\n' +
                     '            <td>\n' +
-                    '            <span class="btn btn-primary change" data-toggle="modal" data-target="#paidModal">支付</span>\n' +
+                    '            <span class="btn btn-primary pay" data-toggle="modal" data-target="#paidModal">支付</span>\n' +
                     '            <input type="hidden" value="'+item.supplier.s_id+'">\n' +
+                    '            </td> \n' +
                     '   </tr>');
             });
         }
@@ -527,6 +611,20 @@
             }
         });
 
+        $("#allCheck2").click(function () {
+            var bol = $("#allCheck2").prop("checked");
+            var all = $("#supplierGoods input[type=checkbox]");
+            if(bol){
+                $(all).each(function (i,item) {
+                    $(this).prop("checked",true);
+                });
+            }else{
+                $(all).each(function (i,item) {
+                    $(this).prop("checked",false);
+                });
+            }
+        });
+
         $("body").on('click','#sub',function () {
             var choose = $(this).parent().find("select").eq(0).find("option:selected").html();
             var value = $(this).parent().find("input").val();
@@ -574,13 +672,14 @@
                     if (key == "供货商") {
                         key = "supplier_name";
                     } else if (key == "未支付金额") {
-                        key = "sb_unPaid_amount;";
+                        key = "sb_unPaid_amount";
                     } else if (key == "支付金额") {
                         key = "sb_paid_amount";
                     } else if (key == "总金额") {
                         key = "sb_all_amount"
-                    } else if (key == "进货时间") {
-                        key = "sb_start_string"
+                    } else if (key == "时间段") {
+                        key = "sb_start_string";
+                        value = $(this).find(".start_time").val();
                         endtime = $(this).find(".end_time").val();
                     }
 
@@ -588,9 +687,10 @@
                         supplier[key] = value;
                         supplier_bill["supplier"] = supplier;
                     } else if (key == "sb_start_string") {
-                        if(value == "")
                         supplier_bill[key] = value;
-                        supplier_bill["sb_end_string"] = endtime;
+                        if(typeof endtime && "undefined" && endtime == null && endtime == ""){
+                            supplier_bill["sb_end_string"] = endtime;
+                        }
                     } else {
                         supplier_bill[key] = value;
                     }
@@ -680,6 +780,95 @@
                 $(".chose_33").prop("type", "text");
             }
 
+        });
+
+        function new_orders(result){
+            var w = $("#supplierGoods");
+            $(result).each(function(i,item){
+                w.append('<tr>\n' +
+                    '            <td><input type="checkbox" checked="true"></td>\n' +
+                    '            <td>'+item.goods.goods_name+'<input type="hidden" value="'+item.goods.g_id+'"></td>\n' +
+                    '            <td>'+item.goods.goodsType.tg_name+'<input type="hidden" value="'+item.goods.goodsType.tg_id+'"></td>\n' +
+                    '            <td>'+item.supplier.supplier_name+'<input type="hidden" value="'+item.supplier.s_id+'"></td>\n' +
+                    '            <td>'+item.sg_amount+'</td>\n' +
+                    '            <td>'+item.sg_price+'</td>\n' +
+                    '            <td>'+item.sg_date_string+'</td>\n' +
+                    '            <td class="pay">'+item.sg_paid+'</td>\n' +
+                    '            <td>\n' +
+                    '            <input type="hidden" value="'+item.sg_id+'">\n' +
+                    '            </td>\n' +
+                    '        </tr>');
+            });
+            if(result.length <= 0){
+                alert("该供应商已无订单");
+                $('#paidModal').modal('hide');
+            }
+        }
+
+        function pay_orders(){
+            var sg_ids = [];
+            ($("#supplierGoods td input")).each(function (i,item) {
+                if($(this).prop("checked") == true){
+                    console.log($(this).parent().parent().find("td").eq(8).find("input").val());
+                    sg_ids.push($(this).parent().parent().find("td").eq(8).find("input").val());
+                }
+            });
+            if(sg_ids.length <= 0){
+                alert("请选择需要支付的进货订单");
+            }else{
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/supplier/pay_supplierGoods",
+                    type: "POST",
+                    dataType:"json",
+                    data: 'sg_ids='+sg_ids ,
+                    success:function (result) {
+                        if(result == true){
+                            alert("支付成功");
+                            $('#paidModal').modal('hide');
+                            location.reload();
+                        }else {
+                            alert("操作失败,请反馈给客服");
+                        }
+                    }
+                });
+            }
+        }
+
+        $("#paid_supplierGoods").click(function () {
+            var s_ids = [];
+            ($("#supplier_bill td input")).each(function (i, item) {
+                if ($(this).prop("checked") == true) {
+                    s_ids.push($(this).parent().parent().find("td").eq(6).find("input").val());
+                }
+            });
+            $.ajax({
+                url:"${pageContext.request.contextPath}/supplier/get_paySupplierBills",
+                type: "POST",
+                dataType:"json",
+                data: 's_ids='+s_ids,
+                success:function (result) {
+                    new_orders(result);
+                }
+            });
+            $("body").off('click','#Topay').on('click','#Topay',function () {
+                pay_orders();
+            });
+        });
+
+        $("body").on('click','.pay',function () {
+            var s_id = $(this).parent().find("input").val();
+            $.ajax({
+                url:"${pageContext.request.contextPath}/supplier/get_paySupplierBill",
+                type: "POST",
+                dataType:"json",
+                data: 's_id='+s_id,
+                success:function (result) {
+                    new_orders(result);
+                }
+            });
+            $("body").off('click','#Topay').on('click','#Topay',function () {
+                pay_orders();
+            });
         });
 
 

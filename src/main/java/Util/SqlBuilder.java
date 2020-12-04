@@ -264,18 +264,21 @@ public class SqlBuilder {
                 sql.append(" and ");
             }
             sql.append(" sb_paid_amount <= #{sb_paid_amount} ");
+            count++;
         }
         if(supplier_bill.getSb_unPaid_amount() != null){
             if(count > 0){
                 sql.append(" and ");
             }
             sql.append(" sb_unPaid_amount <= #{sb_unPaid_amount} ");
+            count++;
         }
         if(supplier_bill.getSupplier() != null){
             if(count > 0){
                 sql.append(" and ");
             }
             sql.append(" supplier_name = #{supplier.supplier_name} ");
+            count++;
         }
         if(supplier_bill.getSb_start() != null && supplier_bill.getSb_end()!= null){
             if(count > 0){
@@ -288,6 +291,9 @@ public class SqlBuilder {
             }
             sql.append(" sg_date > #{sb_start} ");
         }else if(supplier_bill.getSb_end() != null){
+            if(count > 0){
+                sql.append(" and ");
+            }
             sql.append(" sg_date < #{sb_end} ");
         }
 

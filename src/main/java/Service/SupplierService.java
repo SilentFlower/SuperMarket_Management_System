@@ -45,4 +45,6 @@ public interface SupplierService {
     public Boolean pay_supplierGoodss(Integer sg_id);
 
     public Map<String,Object> get_supplierBill(Page page, Supplier_bill key);
+
+    public List<SupplierGoods> get_paySupplierBill(Integer s_id);
 }

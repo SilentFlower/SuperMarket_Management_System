@@ -215,6 +215,31 @@ public class SupplierController {
         return mv;
     }
 
+    @RequestMapping("/get_paySupplierBill")
+    @ResponseBody
+    public List<SupplierGoods> get_paySupplierBill(Integer s_id){
+        List<SupplierGoods> paySupplierBill = supplierService.get_paySupplierBill(s_id);
+        return paySupplierBill;
+    }
+
+    @RequestMapping("/get_paySupplierBills")
+    @ResponseBody
+    public List<SupplierGoods> get_paySupplierBills(Integer[] s_ids){
+        List<SupplierGoods> paySupplierBill = null;
+        List<SupplierGoods> pay = null;
+        int count = 0;
+        for (Integer s_id : s_ids) {
+            if(count == 0){
+                paySupplierBill = supplierService.get_paySupplierBill(s_id);
+                count++;
+            }else{
+                pay = supplierService.get_paySupplierBill(s_id);
+                paySupplierBill.addAll(pay);
+            }
+        }
+        return paySupplierBill;
+    }
+
 
 
 

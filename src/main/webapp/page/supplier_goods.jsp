@@ -896,7 +896,6 @@
         });
 
         $("#edit_button").click(function () {
-            console.log($("#date_edit").val());
             $("#goodsType_edit_id").prop("disabled", false);
             $.ajax({
                 url:"${pageContext.request.contextPath}/supplier/edit_supplierGoods",
@@ -1070,8 +1069,7 @@
                 }
             });
             if(sg_ids.length == 0) {
-                alert("未选择支付或已经完成支付");
-                $('#paidModal').modal('hide');
+                alert("请选择需要支付的进货订单");
             } else {
                 $.ajax({
                     url: "${pageContext.request.contextPath}/supplier/pay_supplierGoods",
@@ -1090,6 +1088,8 @@
                 });
             }
         });
+
+
 
 
 

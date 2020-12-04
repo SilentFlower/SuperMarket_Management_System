@@ -233,11 +233,24 @@ public class SupplierServiceImpl implements SupplierService {
                 end = newPage.getCount();
             }
             supplier_bills = supplier_bills.subList(start,end);
+            if(supplier_bills != null){
+                for (Supplier_bill supplier_bill : supplier_bills) {
+                    supplier_bill.setSb_start(key.getSb_start());
+                    supplier_bill.setSb_end(key.getSb_end());
+                }
+            }
         }
         List<String> supplier_names = supplierDao.findAllName();
         map.put("supplier_bills", supplier_bills);
         map.put("supplier_names", supplier_names);
         map.put("page", newPage);
         return map;
+    }
+
+
+    @Override
+    public List<SupplierGoods> get_paySupplierBill(Integer s_id) {
+        List<SupplierGoods> supplier_goods = supplierGoodsDao.getUnpaidBy_s_id(s_id);
+        return supplier_goods;
     }
 }
