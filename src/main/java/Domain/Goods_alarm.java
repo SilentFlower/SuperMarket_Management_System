@@ -2,12 +2,15 @@ package Domain;
 
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 /**
  * @author SiletFlower
  * @date 2020/12/7 21:55:42
  * @description
  */
-public class Goods_alarm {
+public class Goods_alarm implements Serializable {
+
     private Goods goods;
     private Integer low;
     private Integer high;
@@ -44,4 +47,6 @@ public class Goods_alarm {
                 ", high=" + high +
                 '}';
     }
+
+
 }

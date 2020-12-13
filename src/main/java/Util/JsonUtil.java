@@ -3,6 +3,7 @@ package Util;
 import Domain.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.apache.ibatis.type.TypeReference;
 
 import java.io.IOException;
 
@@ -56,6 +57,12 @@ public class JsonUtil {
     public static Supplier_bill toSupplier_bill(String supplier_bill) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Supplier_bill key = objectMapper.readValue(supplier_bill, Supplier_bill.class);
+        return key;
+    }
+
+    public static Goods_alarm toGoods_alarm(Object goods_alarm) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Goods_alarm key = objectMapper.convertValue(goods_alarm, Goods_alarm.class);
         return key;
     }
 }

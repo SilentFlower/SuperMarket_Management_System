@@ -7,16 +7,16 @@ import Domain.Goods_alarm;
 import Domain.Page;
 import Domain.GoodsType;
 import Service.GoodsService;
-import Util.PageUtil;
+import Util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.*;
 
 /**
  * @author SiletFlower
@@ -30,8 +30,13 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsTypeDao goodsTypeDao;
     @Autowired
     private GoodsDao goodsDao;
+    @Autowired
+    private MailUtil mailUtil;
 
-    private List<Goods_alarm> goods_alarm = new ArrayList<Goods_alarm>();
+    @Value("${mail.toEmail}")
+    private String to;
+
+    private Map<Integer, Goods_alarm> goods_alarm = new HashMap<Integer, Goods_alarm>();
 
 
     @Override
@@ -212,7 +217,7 @@ public class GoodsServiceImpl implements GoodsService {
         Map<String, Object> map = new HashMap<String, Object>();
         Page newPage = PageUtil.dealWithPage(page, goods_alarm.size());
         List<Goods> allGoods = goodsDao.findAll();
-        map.put("goods_alarm", goods_alarm);
+        map.put("goods_alarm", goods_alarm.values());
         map.put("page",newPage);
         map.put("allGoods",allGoods);
         return map;
@@ -220,35 +225,88 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Boolean add_goods_alarm(Goods_alarm g_a) {
-        for (Goods_alarm goodsAlarm : goods_alarm) {
-            if(goodsAlarm.getGoods().getG_id().equals(g_a.getGoods().getG_id())){
-                return false;
-            }
+        if (goods_alarm.containsKey(g_a.getGoods().getG_id())) {
+            return false;
         }
-        return goods_alarm.add(g_a);
+        goods_alarm.put(g_a.getGoods().getG_id(), g_a);
+        return true;
     }
 
     @Override
-    public Boolean edit_goods_alarm(Goods_alarm goods_alarm, Integer before_g_id) {
-        return null;
+    public Boolean edit_goods_alarm(Goods_alarm g_a, Integer before_g_id) {
+        Goods_alarm before = this.goods_alarm.get(before_g_id);
+        if(!g_a.getGoods().getG_id().equals(before_g_id)){
+            if(goods_alarm.containsKey(g_a.getGoods().getG_id())){
+                return false;
+            }
+            goods_alarm.remove(before_g_id);
+            goods_alarm.put(g_a.getGoods().getG_id(), g_a);
+            return true;
+        }else if(!before.getHigh().equals(g_a.getHigh()) || !before.getLow().equals(g_a.getLow())){
+            goods_alarm.put(g_a.getGoods().getG_id(), g_a);
+            return true;
+        }
+        return false;
     }
 
     @Override
     @Scheduled(cron = "0 0/1 * * * ?")
     public void goods_timer() {
+        StringBuilder builder = new StringBuilder();
+        Boolean bool = false;
         Integer high = null;
         Integer low = null;
-        for (Goods_alarm goodsAlarm : goods_alarm) {
-            Integer g_id = goodsAlarm.getGoods().getG_id();
+        Set<Integer> integers = goods_alarm.keySet();
+        for (Integer integer : integers) {
+            Goods_alarm goodsAlarm = goods_alarm.get(integer);
+            Integer g_id = integer;
             high = goodsAlarm.getHigh();
             low = goodsAlarm.getLow();
-            Goods goods = goodsDao.goods_alarm(g_id, low, high);
-            if(goods != null){
-                System.out.println("执行发送邮件");
-            }else {
+            Goods goods = goodsDao.findById(g_id);
+            if(high == null){
+                high = goods.getGoods_amount();
+            }
+            if(low == null){
+                low = goods.getGoods_amount();
+            }
+            if(goods.getGoods_amount() < low){
+                bool = true;
+                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存小于<strong> "+low+"</strong>，请及时调整。");
+            }else if(goods.getGoods_amount() > high){
+                bool = true;
+                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存大于<strong> "+high+"</strong>，请及时调整。");
+            }
+            if(true){
+                String message = EmailTemplateUtil.emailTemplate(builder.toString());
+                mailUtil.sendMail(message ,to,"库存警报");
+                bool = false;
+            }else{
                 continue;
             }
         }
     }
 
+    @PostConstruct
+    @Override
+    public void goods_timer_load() {
+        Object o = ObjectSaveUtil.readFileToObject();
+        if(o != null){
+            goods_alarm = (Map<Integer, Goods_alarm>) o;
+        }
+    }
+
+    @PreDestroy
+    @Override
+    public void goods_timer_off() {
+        ObjectSaveUtil.writeObjectToFile(goods_alarm);
+    }
+
+    @Override
+    public Boolean delete_goods_alarm(Integer g_id) {
+        Goods_alarm remove = goods_alarm.remove(g_id);
+        if(remove != null){
+            return true;
+        }
+        return false;
+    }
 }

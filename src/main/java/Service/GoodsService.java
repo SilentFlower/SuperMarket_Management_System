@@ -40,9 +40,15 @@ public interface GoodsService {
 
     public void goods_timer();
 
+    public void goods_timer_load();
+
+    public void goods_timer_off();
+
     public Map<String,Object> get_goods_alarm(Page page);
 
     public Boolean add_goods_alarm(Goods_alarm goods_alarm);
 
     public Boolean edit_goods_alarm(Goods_alarm goods_alarm, Integer before_g_id);
+
+    public Boolean delete_goods_alarm(Integer g_id);
 }

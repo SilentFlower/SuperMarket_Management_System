@@ -210,12 +210,12 @@
 
                     <div id="choose_button">
                         <div id="forSearch">
-                            <span class="btn btn-primary" id="search_alarm" data-toggle="modal" data-target="#searchModal">筛选</span>
+
                         </div>
 
                         <div id="forpay">
                             <span class="btn btn-info" id="add_alarm" data-toggle="modal" data-target="#addModal">添加</span>
-                            <span class="btn btn-danger" id="delete_alarm" data-toggle="modal" data-target="#d">批量删除</span>
+                            <span class="btn btn-danger" id="delete_alarms" data-toggle="modal" data-target="#deleteModal">批量删除</span>
                         </div>
                     </div>
 
@@ -223,6 +223,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
+                                    <th class="col-md-1"><input type="checkbox" id="allCheck"><span style="margin-left: 5px">选择</span></th>
                                     <th class="col-md-2">商品名</th>
                                     <th class="col-md-2">种类</th>
                                     <th class="col-md-2">库存上限</th>
@@ -392,65 +393,6 @@
         </div><!-- /.modal -->
     </div>
 
-    <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">过滤器</h4>
-                </div>
-
-                <div class="modal-body">
-
-                    <div style="height: auto;" id="serach">
-
-                        <div id="group_key" style="margin-top: 20px;width: 100%;">
-                            <div class="form-group" id="group_main">
-                                <select class="form-control chose_1" id="select" style="width: 30%">
-                                    <option>商品名</option>
-                                    <option>种类名</option>
-                                    <option>供货商</option>
-                                    <option>进货数量</option>
-                                    <option>进货价格</option>
-                                    <option>进货时间</option>
-                                    <option>是否支付</option>
-                                </select>
-                                <select class="form-control chose_2" id="haokan" style="width: 20%">
-                                    <option>模糊</option>
-                                </select>
-                                <input type="text" style="width: 30%" autocomplete="off" class="form-control chose_3" placeholder="值" list="type_list_search">
-                                <datalist id="type_list_search">
-
-                                </datalist>
-                                <button type="submit" class="btn btn-default chose_4" id="sub">
-                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                </button>
-                            </div>
-
-                            <div class="form-group" id="group_add">
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="modal-footer" id="button_group">
-                    <div>
-                        <button type="button" class="btn btn-danger" id="reset_button">重置</button>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" id="search_button">检索</button>
-                    </div>
-
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal -->
-    </div>
-
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -465,14 +407,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消删除</button>
-                    <button type="button" class="btn btn-danger" id="delete_supplierGoods">提交删除</button>
+                    <button type="button" class="btn btn-danger" id="delete_alarm">提交删除</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
 
     <div style="display: none">
-        <form action="${pageContext.request.contextPath}/goods/get_goods_amount" method="post" id="submit" >
+        <form action="${pageContext.request.contextPath}/goods/get_goods_alarm" method="post" id="submit" >
             <input type="text" value="" name="goods_amount">
             <input type="text" value="${page.pageSize}" name="pageSize">
             <input type="text" value="${page.currentPage}" name="currentPage">
@@ -489,7 +431,6 @@
             page();
             get_goods_alarm();
             get_alarm_info();
-            // get_goods_amount_key();
         });
 
         function submit() {
@@ -534,53 +475,33 @@
             $("#Pagination ul").html(page);
         }
 
-        <%--function get_goods_amount_key() {--%>
-        <%--    var keys = ${goods_amount_key};--%>
-        <%--    var k = JSON.stringify(keys);--%>
-        <%--    $("#submit input").eq(0).prop("value",k);--%>
-        <%--    var key;--%>
-        <%--    var value;--%>
-        <%--    for(var name in keys){--%>
-        <%--        if(keys[name] != null){--%>
-        <%--            if(name == "goods_name"){--%>
-        <%--                $("#search_goods_name").prop("value",keys[name]);--%>
-        <%--            }else if(name == "goodsType"){--%>
-        <%--                $("#search_goods_type").prop("value",keys[name].tg_name);--%>
-        <%--            }else if(name == "goods_amount"){--%>
-        <%--                $("#search_goods_amount").prop("value",keys[name]);--%>
-        <%--            }--%>
-        <%--        }--%>
-        <%--    }--%>
-        <%--}--%>
-
         function get_goods_alarm(){
             var goods_alarm = ${goods_alarm};
             var w = $("#goods_alarm");
             w.empty();
             $(goods_alarm).each(function(i,item){
+                var high = item.high;
+                var low =item.low;
+                if(item.high == null){
+                    high = "未设置";
+                }
+                if(item.low == null){
+                    low = "未设置";
+                }
                 w.append('<tr>\n' +
+                    '            <td><input type="checkbox"></td>\n' +
                     '            <td>'+item.goods.goods_name+'</td>\n' +
                     '            <td>'+item.goods.goodsType.tg_name+'</td>\n' +
-                    '            <td>'+item.high+'</td>\n' +
-                    '            <td>'+item.low+'</td>\n' +
+                    '            <td>'+high+'</td>\n' +
+                    '            <td>'+low+'</td>\n' +
                     '            <td>\n' +
                     '            <span class="btn btn-primary change" data-toggle="modal" data-target="#editModal">修改</span>\n' +
-                    '            <span class="btn btn-danger delete" data-toggle="modal" data-target="#paidModal">删除</span>\n' +
+                    '            <span class="btn btn-danger delete" data-toggle="modal" data-target="#deleteModal">删除</span>\n' +
                     '            <input type="hidden" value="'+item.goods.g_id+'">\n' +
                     '            </td> \n' +
                     '   </tr>');
             });
         }
-
-        // function empty_list_goods_name(names){
-        //     $("#list_goods_name").empty();
-        //     $("#list_goods_name").html(names);
-        // }
-        //
-        // function empty_list_goods_type(names){
-        //     $("#list_goods_type").empty();
-        //     $("#list_goods_type").html(names);
-        // }
 
         function goods_list_add(names) {
             $("#goods_list_add").empty();
@@ -608,32 +529,35 @@
             var low = $("#low").val();
             var high = $("#high").val();
             var goods_alarm = {};
-            var goods = {};
-            for(i in goods_names){
-                if(goods_names[i].goods_name == goods_name){
-                   goods = goods_names[i];
-                   break;
-                }
-            }
-            goods_alarm["low"] = low;
-            goods_alarm["high"] = high;
-            goods_alarm["goods"] = goods;
-            $.ajax({
-                url:"${pageContext.request.contextPath}/goods/add_goods_alarm",
-                type: "POST",
-                dataType: "json",
-                data:JSON.stringify(goods_alarm),
-                contentType:'application/json',
-                success:function (result) {
-                    if (result == true){
-                        alert("添加成功");
-                        location.reload();
-                    }else {
-                        alert("添加失败，请勿重复添加");
+            if(low > high){
+                alert("请保证下限比上限低")
+            }else{
+                var goods = {};
+                for(i in goods_names){
+                    if(goods_names[i].goods_name == goods_name){
+                        goods = goods_names[i];
+                        break;
                     }
                 }
-            })
-
+                goods_alarm["low"] = low;
+                goods_alarm["high"] = high;
+                goods_alarm["goods"] = goods;
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/goods/add_goods_alarm",
+                    type: "POST",
+                    dataType: "json",
+                    data:JSON.stringify(goods_alarm),
+                    contentType:'application/json',
+                    success:function (result) {
+                        if (result == true){
+                            alert("添加成功");
+                            location.reload();
+                        }else {
+                            alert("添加失败，请勿重复添加");
+                        }
+                    }
+                })
+            }
         });
 
         $("body").on('click','#edit',function () {
@@ -641,53 +565,109 @@
             var goods_names = ${allGoods};
             var low = $("#low_edit").val();
             var high = $("#high_edit").val();
-            var before_g_id = $("#before_g_id").val();
-            var goods_alarm = {};
-            var goods = {};
-            var data = {};
-            for(i in goods_names){
-                if(goods_names[i].goods_name == goods_name){
-                    goods = goods_names[i];
-                    break;
-                }
-            }
-            goods_alarm["low"] = low;
-            goods_alarm["high"] = high;
-            goods_alarm["goods"] = goods;
-            data["goods_alarm"] = goods_alarm;
-            data["before_g_id"] = before_g_id;
-            $.ajax({
-                url:"${pageContext.request.contextPath}/goods/edit_goods_alarm",
-                type: "POST",
-                dataType: "json",
-                contentType:'application/json',
-                data:JSON.stringify(data),
-                success:function (result) {
-                    if (result == true){
-                        alert("修改成功");
-                        location.reload();
-                    }else {
-                        alert("修改失败");
+            if(low > high){
+                alert("请保证下限比上限低")
+            }else{
+                var before_g_id = $("#before_g_id").val();
+                var goods_alarm = {};
+                var goods = {};
+                var data = {};
+                for(i in goods_names){
+                    if(goods_names[i].goods_name == goods_name){
+                        goods = goods_names[i];
+                        break;
                     }
                 }
-            })
-
+                goods_alarm["low"] = low;
+                goods_alarm["high"] = high;
+                goods_alarm["goods"] = goods;
+                data["goods_alarm"] = goods_alarm;
+                data["before_g_id"] = before_g_id;
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/goods/edit_goods_alarm",
+                    type: "POST",
+                    dataType: "json",
+                    contentType:'application/json',
+                    data:JSON.stringify(data),
+                    success:function (result) {
+                        if (result == true){
+                            alert("修改成功");
+                            location.reload();
+                        }else {
+                            alert("修改失败");
+                        }
+                    }
+                })
+            }
         });
 
         $("body").on('click','.change',function () {
             var g_id = $(this).parent().find("input").val();
             var goods_alarm = ${goods_alarm};
             var choose ="";
+            var i =0;
             for( i in goods_alarm){
                 if(goods_alarm[i].goods.g_id == g_id){
                     choose = goods_alarm;
+                    break;
                 }
             }
-            $("#name_edit").prop("value", choose[0].goods.goods_name);
-            $("#type_edit").prop("value", choose[0].goods.goodsType.tg_name);
-            $("#low_edit").prop("value", choose[0].low);
-            $("#high_edit").prop("value", choose[0].high);
-            $("#before_g_id").prop("value", choose[0].goods.g_id);
+            $("#name_edit").prop("value", choose[i].goods.goods_name);
+            $("#type_edit").prop("value", choose[i].goods.goodsType.tg_name);
+            $("#low_edit").prop("value", choose[i].low);
+            $("#high_edit").prop("value", choose[i].high);
+            $("#before_g_id").prop("value", choose[i].goods.g_id);
+        });
+
+        $("body").on('click','.delete',function () {
+            var g_id = $(this).parent().find("input").val();
+            console.log(g_id);
+            $("body").off('click','#delete_alarm').on('click','#delete_alarm',function () {
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/goods/delete_goods_alarm",
+                    type: "POST",
+                    dataType: "json",
+                    data:"g_id="+g_id,
+                    success:function (result) {
+                        if (result == true){
+                            alert("删除成功");
+                            location.reload();
+                        }else {
+                            alert("删除失败");
+                        }
+                    }
+                })
+            });
+        });
+
+        $("body").on('click','#delete_alarm',function () {
+            var g_ids = [];
+            ($('.delete').parent().parent().find("td input")).each(function (i,item) {
+                if($(this).prop("checked") == true){
+                    g_ids.push($(this).parent().parent().find("td").eq(5).find("input").val());
+                }
+            });
+
+            if(g_ids.length == 0){
+                alert("未选择删除项");
+                $('#deleteModal').modal('hide');
+            }else{
+                $.ajax({
+                    url:"${pageContext.request.contextPath}/goods/delete_goods_alarms",
+                    type: "POST",
+                    dataType:"json",
+                    data: 'g_ids='+g_ids ,
+                    success:function (result) {
+                        if(result == true){
+                            alert("删除成功");
+                            $('#deleteModal').modal('hide');
+                            location.reload();
+                        }else {
+                            alert("操作失败,请反馈给客服");
+                        }
+                    }
+                });
+            }
         });
 
         $("body").on('click','#Pagination ul > li a',function () {
@@ -738,6 +718,20 @@
             var json = JSON.stringify(goods);
             $("#submit input").eq(0).prop("value", json);
             submit();
+        });
+
+        $("#allCheck").click(function () {
+            var bol = $("#allCheck").prop("checked");
+            var all = $("tbody input[type=checkbox]");
+            if(bol){
+                $(all).each(function (i,item) {
+                    $(this).prop("checked",true);
+                });
+            }else{
+                $(all).each(function (i,item) {
+                    $(this).prop("checked",false);
+                });
+            }
         });
 
     </script>

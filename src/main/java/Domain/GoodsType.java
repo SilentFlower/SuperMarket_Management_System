@@ -1,11 +1,13 @@
 package Domain;
 
+import java.io.Serializable;
+
 /**
  * @author SiletFlower
  * @date 2020/11/24 09:34:59
  * @description
  */
-public class GoodsType {
+public class GoodsType implements Serializable {
     private Integer tg_id;
     private String tg_name;
     private Integer tg_count;

@@ -204,10 +204,30 @@ public class GoodsController {
     @RequestMapping("/edit_goods_alarm")
     @ResponseBody
     public boolean edit_goods_alarm(@RequestBody Map<String,Object> map){
-//        Boolean bool = goodsService.edit_goods_alarm();
-        return true;
+        Integer before_g_id = Integer.valueOf((String) map.get("before_g_id")) ;
+        Goods_alarm goods_alarm = JsonUtil.toGoods_alarm(map.get("goods_alarm"));
+        Boolean bool = goodsService.edit_goods_alarm(goods_alarm,before_g_id);
+        return bool;
     }
 
+    @RequestMapping("/delete_goods_alarm")
+    @ResponseBody
+    public boolean delete_goods_alarm(Integer g_id){
+        Boolean bool = goodsService.delete_goods_alarm(g_id);
+        return bool;
+    }
+
+    @RequestMapping("/delete_goods_alarms")
+    @ResponseBody
+    public boolean delete_goods_alarms(Integer[] g_ids){
+        for (Integer g_id : g_ids) {
+            Boolean bool = goodsService.delete_goods_alarm(g_id);
+            if(!bool){
+                return bool;
+            }
+        }
+        return true;
+    }
 
 
 }

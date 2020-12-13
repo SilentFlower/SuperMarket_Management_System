@@ -26,8 +26,10 @@
         <property name="basePackage" value="Dao"/>
     </bean>
 
-    <mvc:component-scan base-package="Service,Dao,Domain"/>
+    <mvc:component-scan base-package="Service,Dao,Domain,Util"/>
 
     <task:annotation-driven/>
+
+    <import resource="spring-mail.xml"/>
 
 </beans>

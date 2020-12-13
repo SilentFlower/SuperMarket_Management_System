@@ -78,8 +78,4 @@ public interface GoodsDao {
             @Result(property = "goodsType",column = "tg_id",one = @One(select = "Dao.GoodsTypeDao.getById"))
     })
     public List<Goods> findAll();
-
-
-    @SelectProvider(type = SqlBuilder.class,method = "goods_alarm")
-    public Goods goods_alarm(@Param("g_id") Integer g_id,@Param("low") Integer low,@Param("high") Integer high);
 }
