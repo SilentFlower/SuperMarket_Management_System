@@ -41,11 +41,9 @@ public class EmployeeController {
         Map<String, Object> map = employeeService.getEmployees(page,key);
         Page newPage = (Page) map.get("page");
         Object employees = map.get("employees");
-        String employeesString = JsonUtil.toJsonUtil(employees);
-        String keyString = JsonUtil.toJsonUtil(key);
-        mv.addObject("employees",employeesString);
+        mv.addObject("employees",JsonUtil.toJsonUtil(employees));
         mv.addObject("page",newPage);
-        mv.addObject("employeeKeyword",keyString);
+        mv.addObject("employeeKeyword",JsonUtil.toJsonUtil(key));
         mv.setViewName("employeeList");
         return mv;
     }

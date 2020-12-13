@@ -204,8 +204,9 @@
                         <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">2</span>
                     </a>
                     <ul>
-                        <li><a href="">库存查询</a></li>
-                        <li><a href="">库存报警</a></li>
+                        <li><a href="${pageContext.request.contextPath}/goods/get_goods_amount">库存查询</a></li>
+                        <li><a href="${pageContext.request.contextPath}/goods/get_goods_alarm">库存报警</a></li>
+                        <li><a href="">库存盘点</a></li>
                     </ul>
                 </li>
 

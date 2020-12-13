@@ -501,8 +501,12 @@
 
         function addKey(key,value) {
             var newAdd = '<div>';
-            newAdd += '<input class="form-control chose_1"  type="text" disabled value='+key+'>';
-            newAdd += '<input class="form-control chose_2"  type="text" disabled value="模糊">';
+            var ccc = "模糊";
+            if(key == "库存"){
+                ccc = "小于等于";
+            }
+            newAdd += '<input class="form-control chose_1"  type="text" disabled value="'+key+'">';
+            newAdd += '<input class="form-control chose_2"  type="text" disabled value="'+ccc+'">';
             newAdd += '<input class="form-control chose_3"  type="text" disabled value="'+value+'">';
             newAdd += '<button type="submit" class="btn btn-default chose_4" id="remove">\n' +
                 '          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>\n' +
@@ -622,7 +626,6 @@
 
         function type_reset() {
             $("#type_list_search").empty();
-            $("#type_list_search").html(goodsTypes);
         }
 
         function setGoodsType(type,data) {
@@ -634,7 +637,6 @@
                     var goodsTypes = "";
                     $(result).each(function (i,item) {
                         if(data == item){
-                            console.log(data);
                             $("#type_edit").prop("value", data);
                         }
                         goodsTypes += '<option value="'+item+'">'+item+'</option>';
@@ -651,15 +653,16 @@
             });
         }
 
-        function setSelected(data){
-
-        }
-
         $("body").on('change','#select',function () {
             if($(this).val() == "种类名"){
                 setGoodsType("search",false);
             }else{
                 type_reset();
+            }
+            if($(this).val() == "库存"){
+                $("#haokan option").html("小于等于");
+            }else{
+                $("#haokan option").html("模糊");
             }
         });
 

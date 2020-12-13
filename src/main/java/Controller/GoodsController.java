@@ -1,14 +1,18 @@
 package Controller;
 
 import Domain.Goods;
+import Domain.Goods_alarm;
 import Domain.Page;
 import Domain.GoodsType;
 import Service.GoodsService;
 import Util.JsonUtil;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -99,11 +103,9 @@ public class GoodsController {
         Map<String, Object> map = goodsService.getGoods(page,key);
         Object goodss = map.get("goods");
         Page newPage = (Page) map.get("page");
-        String goodsTypesString = JsonUtil.toJsonUtil(goodss);
-        String keyString = JsonUtil.toJsonUtil(key);
-        mv.addObject("goods",goodsTypesString);
+        mv.addObject("goods",JsonUtil.toJsonUtil(goodss));
         mv.addObject("page",newPage);
-        mv.addObject("goodsKeyword",keyString);
+        mv.addObject("goodsKeyword",JsonUtil.toJsonUtil(key));
         mv.setViewName("goodsList");
         return mv;
     }
@@ -154,6 +156,55 @@ public class GoodsController {
                 return false;
             }
         }
+        return true;
+    }
+
+    @RequestMapping("/get_goods_amount")
+    @ResponseBody
+    public ModelAndView get_goods_amount(ModelAndView mv,Page page,String goods_amount){
+        Goods key = null;
+        if(goods_amount != null && !"".equals(goods_amount)){
+            key = JsonUtil.toGoods(goods_amount);
+        }
+        Map<String, Object> map = goodsService.getGoods(page, key);
+        List<String> allGoodsName = goodsService.getAllGoodsName();
+        List<String> allGoodsTypeName = goodsService.getAllGoodsTypeName();
+        Object goodss = map.get("goods");
+        Page newPage = (Page) map.get("page");
+        mv.addObject("goods",JsonUtil.toJsonUtil(goodss));
+        mv.addObject("page",newPage);
+        mv.addObject("goods_amount_key",JsonUtil.toJsonUtil(key));
+        mv.addObject("goods_names",JsonUtil.toJsonUtil(allGoodsName));
+        mv.addObject("goods_type_names",JsonUtil.toJsonUtil(allGoodsTypeName));
+        mv.setViewName("goods_amount_search");
+        return mv;
+    }
+
+    @RequestMapping("/get_goods_alarm")
+    @ResponseBody
+    public ModelAndView get_goods_alarm(ModelAndView mv,Page page){
+        mv.setViewName("goods_alarm");
+        Map<String, Object> map = goodsService.get_goods_alarm(page);
+        Object goods_alarm = map.get("goods_alarm");
+        Page newPage = (Page) map.get("page");
+        Object allGoods = map.get("allGoods");
+        mv.addObject("goods_alarm",JsonUtil.toJsonUtil(goods_alarm));
+        mv.addObject("allGoods", JsonUtil.toJsonUtil(allGoods));
+        mv.addObject("page", newPage);
+        return mv;
+    }
+
+    @RequestMapping("/add_goods_alarm")
+    @ResponseBody
+    public boolean add_goods_alarm(@RequestBody Goods_alarm goods_alarm){
+        Boolean bool = goodsService.add_goods_alarm(goods_alarm);
+        return bool;
+    }
+
+    @RequestMapping("/edit_goods_alarm")
+    @ResponseBody
+    public boolean edit_goods_alarm(@RequestBody Map<String,Object> map){
+//        Boolean bool = goodsService.edit_goods_alarm();
         return true;
     }
 

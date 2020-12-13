@@ -43,11 +43,9 @@ public class SupplierController {
         Map<String, Object> map = supplierService.getSuppliers(page,key);
         Page newPage = (Page) map.get("page");
         Object suppliers = map.get("suppliers");
-        String suppliersString = JsonUtil.toJsonUtil(suppliers);
-        String keyString = JsonUtil.toJsonUtil(key);
-        mv.addObject("suppliers",suppliersString);
+        mv.addObject("suppliers",JsonUtil.toJsonUtil(suppliers));
         mv.addObject("page",newPage);
-        mv.addObject("supplierKeyword",keyString);
+        mv.addObject("supplierKeyword",JsonUtil.toJsonUtil(key));
         mv.setViewName("supplierList");
         return mv;
     }
@@ -110,11 +108,9 @@ public class SupplierController {
         Map<String, Object> map = supplierService.getSupplierGoods(page,key,end_date);
         Object supplierGoodss = map.get("supplierGoods");
         Page newPage = (Page) map.get("page");
-        String supplierGoodsString = JsonUtil.toJsonUtil(supplierGoodss);
-        String keyString = JsonUtil.toJsonUtil(key);
-        mv.addObject("supplierGoods",supplierGoodsString);
+        mv.addObject("supplierGoods",JsonUtil.toJsonUtil(supplierGoodss));
         mv.addObject("page",newPage);
-        mv.addObject("supplierGoodsKeyword",keyString);
+        mv.addObject("supplierGoodsKeyword",JsonUtil.toJsonUtil(key));
         mv.setViewName("supplier_goods");
         return mv;
     }
@@ -204,13 +200,10 @@ public class SupplierController {
         Object supplier_bills = map.get("supplier_bills");
         Page newPage = (Page)map.get("page");
         Object supplier_names = map.get("supplier_names");
-        String supplier_names_string = JsonUtil.toJsonUtil(supplier_names);
-        String supplier_bill_string = JsonUtil.toJsonUtil(supplier_bills);
-        String key_string = JsonUtil.toJsonUtil(key);
-        mv.addObject("supplier_bill_key",key_string);
+        mv.addObject("supplier_bill_key",JsonUtil.toJsonUtil(key));
         mv.addObject("page", newPage);
-        mv.addObject("supplier_bill", supplier_bill_string);
-        mv.addObject("supplier_names", supplier_names_string);
+        mv.addObject("supplier_bill", JsonUtil.toJsonUtil(supplier_bills));
+        mv.addObject("supplier_names", JsonUtil.toJsonUtil(supplier_names));
         mv.setViewName("supplier_bill");
         return mv;
     }

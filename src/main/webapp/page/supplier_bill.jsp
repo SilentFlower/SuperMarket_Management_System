@@ -454,7 +454,6 @@
         function getKey() {
             var keys = ${supplier_bill_key};
             var k = JSON.stringify(keys);
-            console.log(k);
             $("#submit input").eq(0).prop("value",k);
             var key;
             var value;
@@ -869,6 +868,10 @@
             $("body").off('click','#Topay').on('click','#Topay',function () {
                 pay_orders();
             });
+        });
+
+        $('#paidModal').on('hide.bs.modal', function () {
+            $("#supplierGoods").empty();
         });
 
 

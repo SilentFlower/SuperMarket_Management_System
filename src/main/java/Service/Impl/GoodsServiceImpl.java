@@ -3,13 +3,17 @@ package Service.Impl;
 import Dao.GoodsDao;
 import Dao.GoodsTypeDao;
 import Domain.Goods;
+import Domain.Goods_alarm;
 import Domain.Page;
 import Domain.GoodsType;
 import Service.GoodsService;
 import Util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +30,9 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsTypeDao goodsTypeDao;
     @Autowired
     private GoodsDao goodsDao;
+
+    private List<Goods_alarm> goods_alarm = new ArrayList<Goods_alarm>();
+
 
     @Override
     public Map<String, Object> getGoodType(Page page,GoodsType goodsType) {
@@ -193,4 +200,55 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return false;
     }
+
+    @Override
+    public List<String> getAllGoodsName() {
+        return goodsDao.getAllName();
+    }
+
+
+    @Override
+    public Map<String,Object> get_goods_alarm(Page page) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        Page newPage = PageUtil.dealWithPage(page, goods_alarm.size());
+        List<Goods> allGoods = goodsDao.findAll();
+        map.put("goods_alarm", goods_alarm);
+        map.put("page",newPage);
+        map.put("allGoods",allGoods);
+        return map;
+    }
+
+    @Override
+    public Boolean add_goods_alarm(Goods_alarm g_a) {
+        for (Goods_alarm goodsAlarm : goods_alarm) {
+            if(goodsAlarm.getGoods().getG_id().equals(g_a.getGoods().getG_id())){
+                return false;
+            }
+        }
+        return goods_alarm.add(g_a);
+    }
+
+    @Override
+    public Boolean edit_goods_alarm(Goods_alarm goods_alarm, Integer before_g_id) {
+        return null;
+    }
+
+    @Override
+    @Scheduled(cron = "0 0/1 * * * ?")
+    public void goods_timer() {
+        Integer high = null;
+        Integer low = null;
+        for (Goods_alarm goodsAlarm : goods_alarm) {
+            Integer g_id = goodsAlarm.getGoods().getG_id();
+            high = goodsAlarm.getHigh();
+            low = goodsAlarm.getLow();
+            Goods goods = goodsDao.goods_alarm(g_id, low, high);
+            if(goods != null){
+                System.out.println("执行发送邮件");
+            }else {
+                continue;
+            }
+        }
+    }
+
 }

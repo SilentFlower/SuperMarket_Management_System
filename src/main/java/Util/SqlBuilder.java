@@ -144,7 +144,7 @@ public class SqlBuilder {
             if(count > 0){
                 sql.append(" and ");
             }
-            sql.append(" goods_amount like CONCAT('%',#{goods_amount},'%') ");
+            sql.append(" goods_amount <= #{goods_amount} ");
             count++;
         }
         if(goods.getGoods_desc() != null){
@@ -298,5 +298,22 @@ public class SqlBuilder {
         }
 
         return sql.toString();
+    }
+
+    public String goods_alarm(@Param("g_id") Integer g_id,@Param("low") Integer low,@Param("high") Integer high){
+        StringBuilder builder = new StringBuilder();
+        int count = 0;
+        builder.append(" select * from goods where g_id =#{g_id} and");
+        if(low != null){
+            builder.append(" goods_amount < #{low} ");
+            count++;
+        }
+        if(high != null){
+            if(count > 0){
+                builder.append(" or ");
+            }
+            builder.append(" goods_amount > #{high} ");
+        }
+        return builder.toString();
     }
 }

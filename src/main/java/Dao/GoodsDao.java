@@ -68,4 +68,18 @@ public interface GoodsDao {
             "goods_amount = #{goods_amount},tg_id = #{tg_id} " +
             "where g_id = #{g_id}")
     public Integer updateGoods(Goods goods);
+
+    @Select("select goods_name from goods")
+    public List<String> getAllName();
+
+    @Select("select * from goods")
+    @Results({
+            @Result(property = "tg_id",column = "tg_id"),
+            @Result(property = "goodsType",column = "tg_id",one = @One(select = "Dao.GoodsTypeDao.getById"))
+    })
+    public List<Goods> findAll();
+
+
+    @SelectProvider(type = SqlBuilder.class,method = "goods_alarm")
+    public Goods goods_alarm(@Param("g_id") Integer g_id,@Param("low") Integer low,@Param("high") Integer high);
 }
