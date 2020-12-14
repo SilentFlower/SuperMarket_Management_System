@@ -479,28 +479,28 @@
             var goods_alarm = ${goods_alarm};
             var w = $("#goods_alarm");
             w.empty();
-            $(goods_alarm).each(function(i,item){
-                var high = item.high;
-                var low =item.low;
-                if(item.high == null){
+            for (var key in goods_alarm){
+                var high = goods_alarm[key].high;
+                var low = goods_alarm[key].low;
+                if(goods_alarm[key].high == null){
                     high = "未设置";
                 }
-                if(item.low == null){
+                if(goods_alarm[key].low == null){
                     low = "未设置";
                 }
                 w.append('<tr>\n' +
                     '            <td><input type="checkbox"></td>\n' +
-                    '            <td>'+item.goods.goods_name+'</td>\n' +
-                    '            <td>'+item.goods.goodsType.tg_name+'</td>\n' +
+                    '            <td>'+goods_alarm[key].goods.goods_name+'</td>\n' +
+                    '            <td>'+goods_alarm[key].goods.goodsType.tg_name+'</td>\n' +
                     '            <td>'+high+'</td>\n' +
                     '            <td>'+low+'</td>\n' +
                     '            <td>\n' +
                     '            <span class="btn btn-primary change" data-toggle="modal" data-target="#editModal">修改</span>\n' +
                     '            <span class="btn btn-danger delete" data-toggle="modal" data-target="#deleteModal">删除</span>\n' +
-                    '            <input type="hidden" value="'+item.goods.g_id+'">\n' +
+                    '            <input type="hidden" value="'+goods_alarm[key].goods.g_id+'">\n' +
                     '            </td> \n' +
                     '   </tr>');
-            });
+            }
         }
 
         function goods_list_add(names) {

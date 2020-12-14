@@ -36,7 +36,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Value("${mail.toEmail}")
     private String to;
 
-    private Map<Integer, Goods_alarm> goods_alarm = new HashMap<Integer, Goods_alarm>();
+    private Map<Integer, Goods_alarm> goods_alarm = new LinkedHashMap<Integer, Goods_alarm>();
 
 
     @Override
@@ -214,12 +214,24 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Map<String,Object> get_goods_alarm(Page page) {
+        Map<Integer, Goods_alarm> back = new LinkedHashMap<Integer, Goods_alarm>();
         Map<String, Object> map = new HashMap<String, Object>();
         Page newPage = PageUtil.dealWithPage(page, goods_alarm.size());
-        List<Goods> allGoods = goodsDao.findAll();
-        map.put("goods_alarm", goods_alarm.values());
+        Integer start = (page.getCurrentPage()-1)*page.getPageSize();
+        Integer end = start+page.getPageSize();
+        if(end >= newPage.getCount()){
+            end = newPage.getCount();
+        }
+        int count = 0;
+        for (Integer s : goods_alarm.keySet()) {
+            if(count >= start && count <= end) {
+                back.put(s, goods_alarm.get(s));
+            }
+        }
+        List<Goods> all = goodsDao.findAll();
+        map.put("goods_alarm", back);
         map.put("page",newPage);
-        map.put("allGoods",allGoods);
+        map.put("allGoods",all);
         return map;
     }
 
@@ -252,38 +264,38 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     @Scheduled(cron = "0 0/1 * * * ?")
     public void goods_timer() {
-        StringBuilder builder = new StringBuilder();
-        Boolean bool = false;
-        Integer high = null;
-        Integer low = null;
-        Set<Integer> integers = goods_alarm.keySet();
-        for (Integer integer : integers) {
-            Goods_alarm goodsAlarm = goods_alarm.get(integer);
-            Integer g_id = integer;
-            high = goodsAlarm.getHigh();
-            low = goodsAlarm.getLow();
-            Goods goods = goodsDao.findById(g_id);
-            if(high == null){
-                high = goods.getGoods_amount();
-            }
-            if(low == null){
-                low = goods.getGoods_amount();
-            }
-            if(goods.getGoods_amount() < low){
-                bool = true;
-                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存小于<strong> "+low+"</strong>，请及时调整。");
-            }else if(goods.getGoods_amount() > high){
-                bool = true;
-                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存大于<strong> "+high+"</strong>，请及时调整。");
-            }
-            if(true){
-                String message = EmailTemplateUtil.emailTemplate(builder.toString());
-                mailUtil.sendMail(message ,to,"库存警报");
-                bool = false;
-            }else{
-                continue;
-            }
-        }
+//        StringBuilder builder = new StringBuilder();
+//        Boolean bool = false;
+//        Integer high = null;
+//        Integer low = null;
+//        Set<Integer> integers = goods_alarm.keySet();
+//        for (Integer integer : integers) {
+//            Goods_alarm goodsAlarm = goods_alarm.get(integer);
+//            Integer g_id = integer;
+//            high = goodsAlarm.getHigh();
+//            low = goodsAlarm.getLow();
+//            Goods goods = goodsDao.findById(g_id);
+//            if(high == null){
+//                high = goods.getGoods_amount();
+//            }
+//            if(low == null){
+//                low = goods.getGoods_amount();
+//            }
+//            if(goods.getGoods_amount() < low){
+//                bool = true;
+//                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存小于<strong> "+low+"</strong>，请及时调整。");
+//            }else if(goods.getGoods_amount() > high){
+//                bool = true;
+//                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存大于<strong> "+high+"</strong>，请及时调整。");
+//            }
+//            if(true){
+//                String message = EmailTemplateUtil.emailTemplate(builder.toString());
+//                mailUtil.sendMail(message ,to,"库存警报");
+//                bool = false;
+//            }else{
+//                continue;
+//            }
+//        }
     }
 
     @PostConstruct
