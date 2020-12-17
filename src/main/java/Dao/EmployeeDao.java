@@ -37,6 +37,13 @@ public interface EmployeeDao {
             "values(#{employee_name},#{employee_sex},#{employee_addr},#{employee_tel},#{employee_email},#{u_id})")
     public void addEmployee(Employee employee);
 
+    @Select("select * from employee where e_id = #{e_id}")
+    @Results({
+            @Result(property = "u_id",column = "u_id"),
+            @Result(property = "user",column = "u_id",javaType = User.class,one = @One(select = "Dao.UserDao.findById"))
+    })
+    public Employee findById(Integer e_id);
+
     @Select("select * from employee where u_id = #{u_id}")
     public Employee findByUid(Integer u_id);
 
@@ -48,6 +55,8 @@ public interface EmployeeDao {
     @Delete("delete from employee where e_id = #{e_id}")
     public Integer deleteById(Integer e_id);
 
+
+
     @SelectProvider(type = SqlBuilder.class, method = "bulidSqlByKeyword")
     @Results({
             @Result(property = "u_id", column = "u_id"),
@@ -57,4 +66,10 @@ public interface EmployeeDao {
     })
     public List<Employee> searchByKey(Employee employee);
 
+    @Select("select * from employee")
+    @Results({
+            @Result(property = "u_id",column = "u_id"),
+            @Result(property = "user",column = "u_id",javaType = User.class,one = @One(select = "Dao.UserDao.findById"))
+    })
+    public List<Employee> findAll();
 }

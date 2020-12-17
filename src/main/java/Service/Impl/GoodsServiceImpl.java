@@ -224,9 +224,10 @@ public class GoodsServiceImpl implements GoodsService {
         }
         int count = 0;
         for (Integer s : goods_alarm.keySet()) {
-            if(count >= start && count <= end) {
+            if(count >= start && count < end) {
                 back.put(s, goods_alarm.get(s));
             }
+            count++;
         }
         List<Goods> all = goodsDao.findAll();
         map.put("goods_alarm", back);

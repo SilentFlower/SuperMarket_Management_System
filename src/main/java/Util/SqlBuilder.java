@@ -289,14 +289,122 @@ public class SqlBuilder {
             if(count > 0){
                 sql.append(" and ");
             }
-            sql.append(" sg_date > #{sb_start} ");
+            sql.append(" sg_date >= #{sb_start} ");
         }else if(supplier_bill.getSb_end() != null){
             if(count > 0){
                 sql.append(" and ");
             }
-            sql.append(" sg_date < #{sb_end} ");
+            sql.append(" sg_date <= #{sb_end} ");
         }
 
+        return sql.toString();
+    }
+
+    public String edit_employeeSale(SaleGoods saleGoods){
+        int count = 0;
+        StringBuilder sql = new StringBuilder(" update sale_goods set");
+        if(saleGoods.getG_id() != null && !"".equals(saleGoods.getG_id())){
+            sql.append(" g_id = #{g_id} ");
+            count++;
+        }
+        if(saleGoods.getE_id() != null && !"".equals(saleGoods.getE_id())){
+            if(count > 0){
+                sql.append(" , ");
+            }
+            sql.append(" e_id = #{e_id} ");
+            count++;
+        }
+        if(saleGoods.getSale_amount() != null && !"".equals(saleGoods.getSale_amount())){
+            if(count > 0){
+                sql.append(" , ");
+            }
+            sql.append(" sale_amount = #{sale_amount} ");
+            count++;
+        }
+        if(saleGoods.getSale_price() != null && !"".equals(saleGoods.getSale_price())){
+            if(count > 0){
+                sql.append(" , ");
+            }
+            sql.append(" sale_price = #{sale_price} ");
+            count++;
+        }
+        if(saleGoods.getSale_date() != null && !"".equals(saleGoods.getSale_date())){
+            if(count > 0){
+                sql.append(" , ");
+            }
+            sql.append(" sale_date = #{sale_date} ");
+            count++;
+        }
+        sql.append(" where sale_id = #{sale_id} ");
+        return sql.toString();
+    }
+
+    public String employeeSaleByKey(SaleGoods saleGoods){
+        int count = 0;
+        StringBuilder sql = new StringBuilder(" select * from sale_goods a ");
+        if(saleGoods.getEmployee().getEmployee_name() != null){
+            sql.append(" left join employee b on a.e_id = b.e_id ");
+        }
+
+        if(saleGoods.getGoods().getGoods_name() != null || saleGoods.getGoods().getGoodsType() != null){
+            sql.append(" left join goods c on a.g_id = c.g_id ");
+        }
+
+        if(saleGoods.getGoods().getGoodsType()!= null){
+            sql.append(" left join type_goods d on d.tg_id = c.tg_id ");
+        }
+
+        sql.append(" where ");
+        if(saleGoods.getSale_price() != null){
+            sql.append(" sale_price <= #{sale_price} ");
+            count++;
+        }
+        if(saleGoods.getSale_amount() != null){
+            if(count > 0){
+                sql.append(" and ");
+            }
+            sql.append(" sale_amount <= #{sale_amount} ");
+            count++;
+        }
+        if(saleGoods.getStartSearchTime() != null){
+            if(count > 0){
+                sql.append(" and ");
+            }
+            if(saleGoods.getEndSearchTime() != null){
+                sql.append(" sale_date between #{startSearchTime} and #{endSearchTime} ");
+            }else{
+                sql.append(" sale_date >= #{startSearchTime} ");
+            }
+            count++;
+        }else if(saleGoods.getEndSearchTime() != null){
+            if(count > 0){
+                sql.append(" and ");
+            }
+            sql.append(" sale_date <= #{endSearchTime} ");
+            count++;
+        }
+        if(saleGoods.getEmployee().getEmployee_name() != null){
+            if(count > 0){
+                sql.append(" and ");
+            }
+            sql.append(" b.employee_name like CONCAT('%',#{employee.employee_name},'%') ");
+            count++;
+        }
+        if(saleGoods.getGoods().getGoods_name() != null){
+            if(saleGoods.getGoods().getGoods_name() != null){
+                if(count > 0){
+                    sql.append(" and ");
+                }
+                sql.append(" goods_name like CONCAT('%',#{goods.goods_name},'%') ");
+            }
+            count++;
+        }
+        if(saleGoods.getGoods() != null && saleGoods.getGoods().getGoodsType()!= null){
+            if(count > 0){
+                sql.append(" and ");
+            }
+            sql.append(" tg_name like CONCAT('%',#{goods.goodsType.tg_name},'%')");
+        }
         return sql.toString();
     }
 }

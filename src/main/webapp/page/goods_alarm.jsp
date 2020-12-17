@@ -226,6 +226,7 @@
                                     <th class="col-md-1"><input type="checkbox" id="allCheck"><span style="margin-left: 5px">选择</span></th>
                                     <th class="col-md-2">商品名</th>
                                     <th class="col-md-2">种类</th>
+                                    <th class="col-md-2">实际库存</th>
                                     <th class="col-md-2">库存上限</th>
                                     <th class="col-md-2">库存下限</th>
                                     <th class="col-md-2">相关操作</th>
@@ -318,6 +319,15 @@
                             </div>
                         </div>
 
+                        <div class="form-group" style="padding: 0">
+                            <div class="form-group col-sm-6">
+                                <label for="high" class="control-label">实际库存</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="amount" autocomplete="off" id="actuall_amount_add" disabled>
+                                </div>
+                            </div>
+                        </div>
+
 
                     </form>
 
@@ -374,6 +384,15 @@
                                 <label for="low" class="control-label">库存下限</label>
                                 <div class="col-sm-9">
                                     <input type="number" class="form-control" name="low" id="low_edit" placeholder="库存下限">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="padding: 0">
+                            <div class="form-group col-sm-6">
+                                <label for="high" class="control-label">实际库存</label>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" name="amount" autocomplete="off" id="actuall_amount_edit" disabled>
                                 </div>
                             </div>
                         </div>
@@ -492,6 +511,7 @@
                     '            <td><input type="checkbox"></td>\n' +
                     '            <td>'+goods_alarm[key].goods.goods_name+'</td>\n' +
                     '            <td>'+goods_alarm[key].goods.goodsType.tg_name+'</td>\n' +
+                    '            <td>'+goods_alarm[key].goods.goods_amount+'</td>\n' +
                     '            <td>'+high+'</td>\n' +
                     '            <td>'+low+'</td>\n' +
                     '            <td>\n' +
@@ -617,6 +637,7 @@
             $("#low_edit").prop("value", choose[i].low);
             $("#high_edit").prop("value", choose[i].high);
             $("#before_g_id").prop("value", choose[i].goods.g_id);
+            $("#actuall_amount_edit").prop("value", choose[i].goods.goods_amount);
         });
 
         $("body").on('click','.delete',function () {
@@ -682,8 +703,21 @@
             for(i in goods_names){
                if(goods_names[i].goods_name == goods_name){
                    $("#type_add").prop("value", goods_names[i].goodsType.tg_name);
+                   $("#actuall_amount_add").prop("value",goods_names[i].goods_amount)
                    break;
                }
+            }
+        });
+
+        $("body").on('change','#name_edit',function () {
+            var goods_name = $("#name_edit").val();
+            var goods_names = ${allGoods};
+            for(i in goods_names){
+                if(goods_names[i].goods_name == goods_name){
+                    $("#type_edit").prop("value", goods_names[i].goodsType.tg_name);
+                    $("#actuall_amount_edit").prop("value",goods_names[i].goods_amount)
+                    break;
+                }
             }
         });
 

@@ -206,7 +206,7 @@
                     <ul>
                         <li><a href="${pageContext.request.contextPath}/goods/get_goods_amount">库存查询</a></li>
                         <li><a href="${pageContext.request.contextPath}/goods/get_goods_alarm">库存报警</a></li>
-                        <li><a href="">库存盘点</a></li>
+                        <li><a href="${pageContext.request.contextPath}/goodsStatistics/get_goodsSaleStatistics">库存盘点</a></li>
                     </ul>
                 </li>
 
@@ -216,7 +216,7 @@
                         <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">1</span>
                     </a>
                     <ul>
-                        <li><a href="">商品销售</a></li>
+                        <li><a href="${pageContext.request.contextPath}/sale/get_employeeSale">商品销售</a></li>
                     </ul>
                 </li>
 

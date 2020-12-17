@@ -65,4 +65,11 @@ public class JsonUtil {
         Goods_alarm key = objectMapper.convertValue(goods_alarm, Goods_alarm.class);
         return key;
     }
+
+    @SneakyThrows
+    public static SaleGoods toSaleGoods(String key) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        SaleGoods saleGoods = objectMapper.readValue(key, SaleGoods.class);
+        return saleGoods;
+    }
 }
