@@ -1,6 +1,8 @@
 package Controller;
 
+import Dao.EmployeeDao;
 import Dao.UserDao;
+import Domain.Employee;
 import Domain.User;
 import Service.UserService;
 import Util.NewJsonUtil;
@@ -27,6 +29,8 @@ public class UtilsController {
     @Autowired
     private UserService userService;
 
+
+
     @RequestMapping("/goHome")
     public String goHome(){
         return "index";
@@ -50,11 +54,36 @@ public class UtilsController {
         return "login";
     }
 
-    @RequestMapping("/getUserInfo")
+    @RequestMapping(value = "/getUserInfo",produces = {"text/html;charset=UTF-8"})
     @ResponseBody
     public String getUserInfo(String token) {
-        User user = userService.getUserInfo(token);
-        return NewJsonUtil.toString(user);
+        Employee employee = userService.getUserInfo(token);
+        return NewJsonUtil.toString(employee);
+    }
+
+    @RequestMapping("/get404")
+    public String get404(){
+        return "404";
+    }
+
+    @RequestMapping("/changePasswd")
+    @ResponseBody
+    public boolean veriyPasswd(String pre_passwd,String now_passwd,Integer u_id,HttpServletResponse response,HttpServletRequest request){
+        Boolean b = userService.changePasswd(pre_passwd, now_passwd, u_id);
+        if(b){
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if(cookie.getName().equals("token")){
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                    break;
+                }
+            }
+            return true;
+        }else {
+            return false;
+        }
     }
 
 

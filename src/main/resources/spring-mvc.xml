@@ -31,6 +31,20 @@
             <mvc:exclude-mapping path="/fonts/**"/>
             <bean class="Interceptor.LoginInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/employee/**"/>
+            <mvc:mapping path="/sale/**"/>
+            <mvc:mapping path="/goods/**"/>
+            <mvc:mapping path="/supplier/**"/>
+            <mvc:mapping path="/supplier/**"/>
+            <mvc:exclude-mapping path="/goods/goodsType"/>
+            <mvc:exclude-mapping path="/goods/getGoodsType"/>
+            <mvc:exclude-mapping path="/sale/get_employeeSale"/>
+            <mvc:exclude-mapping path="/goods/getGoods"/>
+            <mvc:exclude-mapping path="/goods/getEditGoods"/>
+            <mvc:exclude-mapping path="/goods/get_goods_amount"/>
+            <bean class="Interceptor.AdminInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 
 

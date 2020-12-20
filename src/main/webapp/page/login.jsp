@@ -136,7 +136,7 @@
                         stringLength:{
                             min:5,
                             max:18,
-                            message:'用户名长度必须为6到18位'
+                            message:'用户名长度必须为5到18位'
                         }
                     }
                 },

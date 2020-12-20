@@ -478,11 +478,120 @@
 
     <script>
         var cho = [];//已经选择的字段
+        function x() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#addNew',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    supplier_name: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    supplier_bankcard: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    email: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    supplier_contact: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    supplier_addr: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function x2() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#edit_button',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    supplier_name: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    supplier_bankcard: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    email: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    supplier_contact: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    supplier_addr: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
         $(function () {
             getKey();
             page();
             getSupplier();
+            x();
+            x2();
         });
 
         function submit() {

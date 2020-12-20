@@ -35,10 +35,10 @@ public interface GoodsTypeDao {
     @Update("update type_goods set tg_name = #{tg_name}, tg_count = #{tg_count} where tg_id = #{tg_id}")
     public Integer editGoodsType(GoodsType goodsType);
 
-    @Select("select * from type_goods where tg_name = #{tg_name} where is_delete = false")
+    @Select("select * from type_goods where tg_name = #{tg_name} and is_delete = false")
     public GoodsType getByName(String tg_name);
 
-    @Select("select tg_id from type_goods where tg_name = #{tg_name} where is_delete = false")
+    @Select("select tg_id from type_goods where tg_name = #{tg_name} and is_delete = false")
     public Integer getIdByName(String tg_name);
 
     @SelectProvider(type = SqlBuilder.class, method = "goodsTypeKeyword")

@@ -1,10 +1,7 @@
 package Dao;
 
 import Domain.User;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -35,4 +32,7 @@ public interface UserDao {
 
     @Update("update user set admin = #{admin} where user_name = #{user_name}")
     Integer updateAdmin(User user);
+
+    @Update("update user set password = #{password} where u_id = #{u_id}")
+    Boolean updatePasswd(@Param("password") String password, @Param("u_id") Integer u_id);
 }

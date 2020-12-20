@@ -349,7 +349,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="addNew">提交更改</button>
+                    <button type="button" class="btn btn-primary" id="addNew" disabled>提交更改</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
@@ -525,6 +525,110 @@
 </body>
 
     <script>
+        function x() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#addNew',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    goods_name: {
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    employee_name: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    sale_amount: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    sale_price: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    sale_date_string: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        function x2() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#edit_button',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    goods_name: {
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    employee_name: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    sale_amount: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    sale_price: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    sale_date_string: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
         var cho = [];//已经选择的字段
         var bool = false;
         var choose_goods = {};
@@ -539,6 +643,8 @@
             getEmployee_sale();
             get_allGoods_info();
             get_allEmployees_info();
+            x1();
+            x2();
         });
 
         function submit() {

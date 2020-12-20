@@ -151,13 +151,15 @@
 <div id="left" class="col-md-2" style="height: 100%">
     <ul class="nav nav-pills nav-stacked" id="www">
         <li>
-            <a id="allFeatures" class="need click">功能列表
+            <a id="allFeatures" i="1" class="need click">功能列表
+                <span class="glyphicon glyphicon-align-justify"></span>
                 <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-                <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">9</span>
+                <span class="badge" id="all" style="background-color: #03A9F5;margin-left: 5px;">11</span>
             </a>
             <ul id="wtf">
-                <li>
+                <li class="forAdmin">
                     <a class="need nn click">员工管理
+                        <span class="glyphicon glyphicon-user"></span>
                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                         <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">1</span>
                     </a>
@@ -166,8 +168,9 @@
                     </ul>
                 </li>
 
-                <li>
+                <li class="forAdmin">
                     <a class="need nn click">供应商管理
+                        <span class="glyphicon glyphicon-briefcase"></span>
                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                         <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">1</span>
                     </a>
@@ -178,6 +181,7 @@
 
                 <li>
                     <a class="need nn click">商品管理
+                        <span class="glyphicon glyphicon-barcode"></span>
                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                         <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">2</span>
                     </a>
@@ -187,10 +191,11 @@
                     </ul>
                 </li>
 
-                <li>
+                <li class="forAdmin">
                     <a class="need nn click">进货管理
+                        <span class="glyphicon glyphicon-send"></span>
                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-                        <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">3</span>
+                        <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">2</span>
                     </a>
                     <ul>
                         <li><a href="${pageContext.request.contextPath}/supplier/supplierGoods">采购进货</a></li>
@@ -200,20 +205,22 @@
 
                 <li>
                     <a class="need nn click">库存管理
+                        <span class="glyphicon glyphicon-stats"></span>
                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-                        <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">2</span>
+                        <span class="badge" id="kucun" style="background-color: #03A9F5;margin-left: 5px;">3</span>
                     </a>
                     <ul>
                         <li><a href="${pageContext.request.contextPath}/goods/get_goods_amount">库存查询</a></li>
-                        <li><a href="${pageContext.request.contextPath}/goods/get_goods_alarm">库存报警</a></li>
-                        <li><a href="${pageContext.request.contextPath}/turnover/get_Turnover">库存盘点</a></li>
+                        <li class="forAdmin"><a href="${pageContext.request.contextPath}/goods/get_goods_alarm">库存报警</a></li>
+                        <li class="forAdmin"><a href="${pageContext.request.contextPath}/turnover/get_Turnover">库存盘点</a></li>
                     </ul>
                 </li>
 
                 <li>
                     <a class="need nn click">销售管理
+                        <span class="glyphicon glyphicon-yen"></span>
                         <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
-                        <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">1</span>
+                        <span class="badge" style="background-color: #03A9F5;margin-left: 5px;">2</span>
                     </a>
                     <ul>
                         <li><a href="${pageContext.request.contextPath}/sale/get_employeeSale">商品销售</a></li>
@@ -229,18 +236,44 @@
 </div>
 <script>
 
+    $(function () {
+        var user = getUserInfo();
+        console.log(user);
+        if(user.user.admin != true){
+            $(".forAdmin").css("display", "none");
+            $("#kucun").html("1");
+            $("#all").html("5");
+        }
+        x10();
+    });
+
 
     $(".need").click(function () {
-        if($(this).hasClass("click")){
-            $(this).removeClass("click");
-            $(this).parent().find("ul").css("display", "none");
-            $(this).find("span").eq(0).removeClass("glyphicon-menu-down")
-            $(this).find("span").eq(0).addClass("glyphicon-menu-up")
+        if($(this).prop("i") == 1){
+            if($(this).hasClass("click")){
+                $(".need").removeClass("click");
+                $(".need").parent().find("ul").css("display", "none");
+                $(".need").find("span").eq(1).removeClass("glyphicon-menu-down")
+                $(".need").find("span").eq(1).addClass("glyphicon-menu-up")
+            }else{
+                $(".need").removeClass("click");
+                $(".need").addClass("click");
+                $(".need").parent().find("ul").css("display", "block");
+                $(".need").find("span").eq(1).removeClass("glyphicon-menu-up")
+                $(".need").find("span").eq(1).addClass("glyphicon-menu-down")
+            }
         }else{
-            $(this).addClass("click");
-            $(this).parent().find("ul").css("display", "block");
-            $(this).find("span").eq(0).removeClass("glyphicon-menu-up")
-            $(this).find("span").eq(0).addClass("glyphicon-menu-down")
+            if($(this).hasClass("click")){
+                $(this).removeClass("click");
+                $(this).parent().find("ul").css("display", "none");
+                $(this).find("span").eq(1).removeClass("glyphicon-menu-down")
+                $(this).find("span").eq(1).addClass("glyphicon-menu-up")
+            }else{
+                $(this).addClass("click");
+                $(this).parent().find("ul").css("display", "block");
+                $(this).find("span").eq(1).removeClass("glyphicon-menu-up")
+                $(this).find("span").eq(1).addClass("glyphicon-menu-down")
+            }
         }
     });
 

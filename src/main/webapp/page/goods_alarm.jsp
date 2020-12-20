@@ -446,10 +446,71 @@
 
     <script>
 
+        function x() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#addNew',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    goods_name: {
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    high: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function x2() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#edit',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    goods_name: {
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    high: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         $(function () {
             page();
             get_goods_alarm();
             get_alarm_info();
+            x();
+            x2();
+
         });
 
         function submit() {

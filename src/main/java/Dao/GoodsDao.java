@@ -39,14 +39,14 @@ public interface GoodsDao {
     public Integer addGoods(Goods goods);
 
 
-    @Select("select * from goods where goods_name = #{goods_name} where is_delete = false")
+    @Select("select * from goods where goods_name = #{goods_name} and is_delete = false")
     @Results({
             @Result(property = "tg_id",column = "tg_id"),
             @Result(property = "goodsType",column = "tg_id",one = @One(select = "Dao.GoodsTypeDao.getById"))
     })
     public Goods findByName(String goods_name);
 
-    @Select("select g_id from goods where goods_name = #{goods_name} where is_delete = false")
+    @Select("select g_id from goods where goods_name = #{goods_name} and is_delete = false")
     public Integer findIdByName(String goods_name);
 
     @Select("select * from goods where g_id = #{g_id} ")

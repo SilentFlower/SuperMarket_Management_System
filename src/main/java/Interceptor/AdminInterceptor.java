@@ -1,6 +1,9 @@
 package Interceptor;
 
+import Domain.Employee;
+import Service.UserService;
 import Util.TokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -13,18 +16,19 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2020/12/19 14:38:35
  * @description
  */
-public class LoginInterceptor implements HandlerInterceptor {
+public class AdminInterceptor implements HandlerInterceptor {
+    @Autowired
+    private UserService userService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = null;
         Cookie[] cookies = request.getCookies();
-        token = TokenUtil.getNowToken(cookies);
-        Boolean verfiy = TokenUtil.verfiyToken(token);
-        if(verfiy){
-            return true;
+        String token = TokenUtil.getNowToken(cookies);
+        Employee employee = userService.getUserInfo(token);
+        if(employee.getUser().getAdmin() == null || employee.getUser().getAdmin() == false){
+            response.sendRedirect(request.getContextPath()+"/utils/get404");
+            return false;
         }
-        response.sendRedirect(request.getContextPath()+"/utils/goLogin");
-        return false;
+        return true;
     }
 
     @Override

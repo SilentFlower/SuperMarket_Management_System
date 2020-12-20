@@ -247,7 +247,7 @@
                         <div class="form-group">
                             <label for="goodsType_count" class="col-sm-2 control-label">包含商品个数</label>
                             <div class="col-sm-10">
-                                <input type="text" name="tg_count" class="form-control" id="goodsType_count"/>
+                                <input type="number" name="tg_count" class="form-control" id="goodsType_count"/>
                             </div>
                         </div>
 
@@ -291,7 +291,7 @@
                         <div class="form-group" id="address-from">
                             <label for="goodsType_edit_count" class="col-sm-2 control-label">包含商品个数</label>
                             <div class="col-sm-10">
-                                <input type="text" name="tg_count" class="form-control" id="goodsType_edit_count"/>
+                                <input type="number" name="tg_count" class="form-control" id="goodsType_edit_count"/>
                             </div>
                         </div>
 
@@ -395,10 +395,72 @@
     <script>
         var cho = [];//已经选择的字段
 
+        function x() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#addNew',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    tg_name: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    tg_count: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function x2() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#edit_button',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    tg_name: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    tg_count: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         $(function () {
             getKey();
             page();
             getGoodsType();
+            x();
+            x2();
         });
 
         function submit() {
@@ -533,6 +595,7 @@
                     url:"${pageContext.request.contextPath}/goods/deleteGoodsType",
                     type: "POST",
                     dataType:"json",
+                    async:false,
                     data: 'tg_id='+tg_id,
                     success:function (result) {
                         if(result == true){
@@ -590,7 +653,7 @@
                         $('#addModal').modal('hide')
                         location.reload();
                     }else {
-                        alert("供应商已经存在");
+                        alert("没有权限或商品已经存在");
                     }
                 }
             });
@@ -610,7 +673,7 @@
                         location.reload();
                     }else {
                         $("#goodsType_edit_id").prop("disabled", true);
-                        alert("未修改或提交数据错误");
+                        alert("没有权限或提交数据错误");
                     }
                 }
             });

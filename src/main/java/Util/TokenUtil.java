@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.junit.Test;
 
+import javax.servlet.http.Cookie;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +83,16 @@ public class TokenUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static String getNowToken(Cookie[] cookies){
+        String token = null;
+        for (Cookie cookie : cookies) {
+            if(cookie.getName().equals("token")){
+                token = cookie.getValue();
+            }
+        }
+        return token;
     }
 
 

@@ -33,6 +33,10 @@
         width:100%;
         height:100%;
     }
+
+    #right-bottom {
+        background-image: url("${pageContext.request.contextPath}/fonts/chaoshi2.png");
+    }
 </style>
 
 
@@ -64,11 +68,14 @@
 
             <div style="height: 92%;padding-top: 10px;">
                 <div id="right-bottom" style="height: 100%;border-radius: 10px;">
-                    <div>
-                        <a href="">有内容</a>
+                    <div class="jumbotron" id="jumbotron" style="background:none">
+                        <h1 style="color: #1199E5">欢迎使用超市管理系统</h1>
+                        <p style="color:#E0E2E3;">这是一个管理商品、供货、销售的多功能系统</p>
+                        <p><a class="btn btn-primary btn-lg" role="button">
+                            使用规则</a>
+                        </p>
                     </div>
                 </div>
-
             </div>
         </div>
 

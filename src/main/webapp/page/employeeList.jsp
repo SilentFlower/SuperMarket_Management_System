@@ -505,11 +505,108 @@
 
     <script>
         var cho = [];//已经选择的字段
-
+        function x() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#addNew',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    user_name: {
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            },
+                            stringLength:{
+                                min:5,
+                                max:18,
+                                message:'用户名长度必须为5到18位'
+                            }
+                        }
+                    },
+                    employee_name:{
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    password: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            },
+                            stringLength:{
+                                min:6,
+                                max:18,
+                                message:'密码长度必须为6到18位'
+                            }
+                        }
+                    },
+                    email: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        function x2() {
+            $("#addModal").bootstrapValidator({
+                submitButtons:'#edit',
+                message: '验证失败',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    password: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            },
+                            stringLength:{
+                                min:6,
+                                max:18,
+                                message:'密码长度必须为6到18位'
+                            }
+                        }
+                    },
+                    employee_name:{
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    },
+                    email: {
+                        message: '验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+        }
         $(function () {
             getKey();
             page();
             getEmployee();
+            x1();
+            x2();
         });
 
         function submit() {

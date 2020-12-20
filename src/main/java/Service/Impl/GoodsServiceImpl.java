@@ -168,27 +168,16 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Boolean edit_goods(Goods goods) {
-        Boolean bool = false;
+        Integer id = goodsTypeDao.getIdByName(goods.getGoodsType().getTg_name());
+        goods.setTg_id(id);
         Goods before = goodsDao.findById(goods.getG_id());
-        if(!before.getGoodsType().getTg_name().equals(goods.getGoodsType().getTg_name())){
-            Integer idByName = goodsTypeDao.getIdByName(goods.getGoodsType().getTg_name());
-            goods.setTg_id(idByName);
-            bool = true;
-        }else{
-            goods.setTg_id(before.getTg_id());
+        if(!before.getTg_id().equals(goods.getTg_id())){
+            goodsTypeDao.minusCountById(before.getTg_id());
+            goodsTypeDao.updateCountById(goods.getTg_id());
         }
-        if(!before.getGoods_name().equals(goods.getGoods_name()) ||
-           !before.getGoods_remarks().equals(goods.getGoods_remarks()) ||
-           !before.getGoods_desc().equals(goods.getGoods_desc()) ||
-           !before.getGoods_amount().equals(goods.getGoods_amount()) ||
-           !before.getGoods_addr().equals(goods.getGoods_addr())){
-            bool = true;
-        }
-        if(bool){
-            Integer integer = goodsDao.updateGoods(goods);
-            if(integer > 0){
+        Integer integer = goodsDao.updateGoods(goods);
+        if(integer > 0){
                 return true;
-            }
         }
         return false;
     }
@@ -196,6 +185,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Boolean deleteGoods(Integer g_id) {
         Goods g = goodsDao.findById(g_id);
+        goods_alarm.remove("g_id");
         Integer integer = goodsDao.deleteById(g_id);
         if(integer > 0){
             Integer integer1 = goodsTypeDao.minusCountById(g.getTg_id());
@@ -266,38 +256,38 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     @Scheduled(cron = "0 0/1 * * * ?")
     public void goods_timer() {
-//        StringBuilder builder = new StringBuilder();
-//        Boolean bool = false;
-//        Integer high = null;
-//        Integer low = null;
-//        Set<Integer> integers = goods_alarm.keySet();
-//        for (Integer integer : integers) {
-//            Goods_alarm goodsAlarm = goods_alarm.get(integer);
-//            Integer g_id = integer;
-//            high = goodsAlarm.getHigh();
-//            low = goodsAlarm.getLow();
-//            Goods goods = goodsDao.findById(g_id);
-//            if(high == null){
-//                high = goods.getGoods_amount();
-//            }
-//            if(low == null){
-//                low = goods.getGoods_amount();
-//            }
-//            if(goods.getGoods_amount() < low){
-//                bool = true;
-//                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存小于<strong> "+low+"</strong>，请及时调整。");
-//            }else if(goods.getGoods_amount() > high){
-//                bool = true;
-//                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存大于<strong> "+high+"</strong>，请及时调整。");
-//            }
-//            if(true){
-//                String message = EmailTemplateUtil.emailTemplate(builder.toString());
-//                mailUtil.sendMail(message ,to,"库存警报");
-//                bool = false;
-//            }else{
-//                continue;
-//            }
-//        }
+        StringBuilder builder = new StringBuilder();
+        Boolean bool = false;
+        Integer high = null;
+        Integer low = null;
+        Set<Integer> integers = goods_alarm.keySet();
+        for (Integer integer : integers) {
+            Goods_alarm goodsAlarm = goods_alarm.get(integer);
+            Integer g_id = integer;
+            high = goodsAlarm.getHigh();
+            low = goodsAlarm.getLow();
+            Goods goods = goodsDao.findById(g_id);
+            if(high == null){
+                high = goods.getGoods_amount();
+            }
+            if(low == null){
+                low = goods.getGoods_amount();
+            }
+            if(goods.getGoods_amount() < low){
+                bool = true;
+                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存小于<strong> "+low+"</strong>，请及时调整。");
+            }else if(goods.getGoods_amount() > high){
+                bool = true;
+                builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存大于<strong> "+high+"</strong>，请及时调整。");
+            }
+            if(true){
+                String message = EmailTemplateUtil.emailTemplate(builder.toString());
+                mailUtil.sendMail(message ,to,"库存警报");
+                bool = false;
+            }else{
+                continue;
+            }
+        }
     }
 
     //在启动前读取存储的警报商品

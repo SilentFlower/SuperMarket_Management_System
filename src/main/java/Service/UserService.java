@@ -1,6 +1,6 @@
 package Service;
 
-import Domain.User;
+import Domain.Employee;
 
 /**
  * @author SiletFlower
@@ -9,5 +9,7 @@ import Domain.User;
  */
 public interface UserService {
 
-    User getUserInfo(String token);
+    Employee getUserInfo(String token);
+
+    Boolean changePasswd(String pre_passwd, String now_passwd,Integer u_id);
 }
