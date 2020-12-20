@@ -308,7 +308,7 @@
                             <label for="isAdm" class="control-label">是否为管理员</label>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="isAdmin" id="isAdm" value="true">
+                                    <input type="checkbox" name="admin" id="isAdm" value="true">
                                 </label>
                             </div>
                         </div>
@@ -395,7 +395,7 @@
                             <label for="isAdm2" class="control-label">是否为管理员</label>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="isAdmin" id="isAdm2" value="true">
+                                    <input type="checkbox" name="admin" id="isAdm2" value="true">
                                 </label>
                             </div>
                         </div>
@@ -405,9 +405,7 @@
                             <textarea class="form-control" id="address2" name="employee_addr" rows="3"></textarea>
                         </div>
 
-
-
-
+                        <input type="hidden" name="e_id" id="e_id" value="">
                     </form>
                 </div>
 
@@ -616,6 +614,7 @@
                     '            <td>\n' +
                     '            <span class="btn btn-primary change" data-toggle="modal" data-target="#editModal" >修改</span>\n' +
                     '            <span class="btn btn-danger delete" data-toggle="modal" data-target="#deleteModal">删除</span>\n' +
+                    '            <input type="hidden" value="'+item.e_id+'" >'+
                     '            </td>\n' +
                     '        </tr>');
             });
@@ -636,15 +635,15 @@
         });
 
         $("body").on('click','.change',function () {
-            var email = $(this).parent().parent().find("td").eq(5).text();
+            var e_id = $(this).parent().find("input").val();
             console.log("触发");
-
             $.ajax({
                 url:"${pageContext.request.contextPath}/employee/getOne",
                 type: "POST",
                 dataType:"json",
-                data: 'email='+email,
+                data: 'e_id='+e_id,
                 success:function (result) {
+                    $("#e_id").prop("value", result.e_id);
                     $("#account2").prop("value",result.user.user_name);
                     $("#accountPwd2").prop("value",result.user.password);
                     $("#trueName2").prop("value",result.employee_name);
@@ -655,7 +654,7 @@
                     }
                     $("#tel2").prop("value",result.employee_tel);
                     $("#emi2").prop("value",result.employee_email);
-                    if(result.user.isAdmin == true){
+                    if(result.user.admin == true){
                         $("#isAdm2").prop("checked",true);
                     }else{
                         $("#isAdm2").prop("checked",false);
@@ -667,13 +666,13 @@
         });
 
         $("body").on('click','.delete',function () {
-            var email = $(this).parent().parent().find("td").eq(5).text();
+            var e_id = $(this).parent().find("input").val();
             $("body").off('click','#deleteEmployee').on('click','#deleteEmployee',function () {
                 $.ajax({
                     url:"${pageContext.request.contextPath}/employee/deleteOne",
                     type: "POST",
                     dataType:"json",
-                    data: 'email='+email,
+                    data: 'e_id='+e_id,
                     success:function (result) {
                         if(result == true){
                             alert("删除成功");
@@ -689,14 +688,14 @@
         });
 
         $("body").on('click','#deleteEmployee',function () {
-            var emails = [];
+            var e_ids = [];
             ($('.delete').parent().parent().find("td input")).each(function (i,item) {
                 if($(this).prop("checked") == true){
-                    emails.push($(this).parent().parent().find("td").eq(5).text());
+                    e_ids.push($(this).parent().parent().find("td").eq(6).find("input").val());
                 }
             });
 
-            if(emails.length == 0){
+            if(e_ids.length == 0){
                 alert("未选择删除项");
                 $('#deleteModal').modal('hide');
             }else{
@@ -704,7 +703,7 @@
                     url:"${pageContext.request.contextPath}/employee/deleteAll",
                     type: "POST",
                     dataType:"json",
-                    data: 'emails='+emails,
+                    data: 'e_ids='+e_ids,
                     success:function (result) {
                         if(result == true){
                             alert("删除成功");

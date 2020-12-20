@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
-/**
+/**员工销售商品具体表
  * @author SiletFlower
  * @date 2020/12/14 20:45:11
  * @description
@@ -27,6 +27,13 @@ public class EmployeeSaleController {
     @Autowired
     private EmployeeSaleService employeeSaleService;
 
+    /**
+     * 获取商品销售情况，分页操作，条件查询
+     * @param mv
+     * @param saleGoods
+     * @param page
+     * @return
+     */
     @RequestMapping("/get_employeeSale")
     public ModelAndView get_employeeSale(ModelAndView mv,String saleGoods,Page page){
         SaleGoods key = null;
@@ -47,6 +54,11 @@ public class EmployeeSaleController {
         return mv;
     }
 
+    /**
+     * 添加商品销售
+     * @param saleGoods
+     * @return
+     */
     @RequestMapping("/add_employeeSale")
     @ResponseBody
     public boolean add_employeeSale(@RequestBody SaleGoods saleGoods){
@@ -54,6 +66,11 @@ public class EmployeeSaleController {
         return bool;
     }
 
+    /**
+     * 修改商品销售
+     * @param saleGoods
+     * @return
+     */
     @PostMapping("/edit_employeeSale")
     @ResponseBody
     public boolean edit_employeeSale(@RequestBody SaleGoods saleGoods){
@@ -61,6 +78,11 @@ public class EmployeeSaleController {
         return bool;
     }
 
+    /**
+     * 删除个人销售记录
+     * @param sale_id
+     * @return
+     */
     @PostMapping("/delete_employeeSale")
     @ResponseBody
     public boolean delete_employeeSale(Integer sale_id){
@@ -68,6 +90,11 @@ public class EmployeeSaleController {
         return bool;
     }
 
+    /**
+     * 批量删除
+     * @param sale_ids
+     * @return
+     */
     @PostMapping("/delete_employeeSales")
     @ResponseBody
     public boolean delete_employeeSales(Integer[] sale_ids){

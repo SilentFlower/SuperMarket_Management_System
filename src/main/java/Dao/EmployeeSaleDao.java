@@ -16,7 +16,7 @@ import java.util.List;
 public interface EmployeeSaleDao {
 
     @Select("select count(sale_id) from sale_goods")
-    public Integer findCount();
+    Integer findCount();
 
     @Select("select * from sale_goods limit #{start},#{end}")
     @Results({
@@ -25,7 +25,7 @@ public interface EmployeeSaleDao {
             @Result(property ="goods" ,column ="g_id",one = @One(select = "Dao.GoodsDao.findById")),
             @Result(property ="employee" ,column ="e_id",one = @One(select = "Dao.EmployeeDao.findById"))
     })
-    public List<SaleGoods> findByPage(@Param("start") int start, @Param("end") int end);
+    List<SaleGoods> findByPage(@Param("start") int start, @Param("end") int end);
 
 
     @Insert("insert into sale_goods (g_id,e_id,sale_amount,sale_date,sale_price)" +
@@ -46,4 +46,25 @@ public interface EmployeeSaleDao {
             @Result(property ="employee" ,column ="e_id",one = @One(select = "Dao.EmployeeDao.findById"))
     })
     List<SaleGoods> findByKey(SaleGoods saleGoods);
+
+    @Select("select * from sale_goods where e_id = #{e_id}")
+    @Results({
+            @Result(property ="g_id" ,column ="g_id" ),
+            @Result(property ="e_id" ,column ="e_id" ),
+            @Result(property ="goods" ,column ="g_id",one = @One(select = "Dao.GoodsDao.findById")),
+            @Result(property ="employee" ,column ="e_id",one = @One(select = "Dao.EmployeeDao.findById"))
+    })
+    List<SaleGoods> get_employeeSale_e_id(Integer e_id);
+
+    @Delete("delete from sale_goods where e_id = #{e_id}")
+    Integer delete_employeeSale_e_id(Integer e_id);
+
+    @Select("select * from sale_goods where sale_id = #{sale_id}")
+    @Results({
+            @Result(property ="g_id" ,column ="g_id" ),
+            @Result(property ="e_id" ,column ="e_id" ),
+            @Result(property ="goods" ,column ="g_id",one = @One(select = "Dao.GoodsDao.findById")),
+            @Result(property ="employee" ,column ="e_id",one = @One(select = "Dao.EmployeeDao.findById"))
+    })
+    SaleGoods getById(Integer sale_id);
 }

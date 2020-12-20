@@ -40,6 +40,17 @@ public class NewJsonUtil {
         return s;
     }
 
+    public static byte[] toByte(Object o) {
+        byte[] s = null;
+        if (o instanceof Byte) return (byte[]) o;
+        try {
+            s = jacksonMapper.writeValueAsBytes(o);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
     public static <T> T toBean(String source, Class<T> dest) {
         T t = null;
         try {
@@ -49,5 +60,16 @@ public class NewJsonUtil {
         }
         return t;
     }
+
+    public static <T> T toBean(byte[] source, Class<T> dest) {
+        T t = null;
+        try {
+            t = jacksonMapper.readValue(source, dest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
+
 
 }

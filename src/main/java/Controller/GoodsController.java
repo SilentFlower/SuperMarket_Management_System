@@ -33,6 +33,13 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+    /**
+     * 分页操作、条件查询操作，查商品种类
+     * @param mv
+     * @param page
+     * @param goodsType
+     * @return
+     */
     @RequestMapping("/goodsType")
     public ModelAndView goodsType(ModelAndView mv, Page page, String goodsType){
         GoodsType key = null;
@@ -51,6 +58,11 @@ public class GoodsController {
         return mv;
     }
 
+    /**
+     * 根据tg_id获取商品种类
+     * @param tg_id
+     * @return
+     */
     @RequestMapping("/getGoodsType")
     @ResponseBody
     public GoodsType getGoodsType(Integer tg_id){
@@ -58,6 +70,11 @@ public class GoodsController {
         return editGoodsType ;
     }
 
+    /**
+     * 修改商品种类信息
+     * @param goodsType
+     * @return
+     */
     @RequestMapping("/editGoodsType")
     @ResponseBody
     public boolean editGoodsType(GoodsType goodsType){
@@ -66,6 +83,11 @@ public class GoodsController {
     }
 
 
+    /**
+     * 删除商品种类（软删除）
+     * @param tg_id
+     * @return
+     */
     @RequestMapping("/deleteGoodsType")
     @ResponseBody
     public boolean deleteGoodsType(Integer tg_id){
@@ -73,6 +95,11 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 批量删除商品种类（软删除）
+     * @param tg_ids
+     * @return
+     */
     @RequestMapping("/deleteGoodsTypes")
     @ResponseBody
     public boolean deleteGoodsType(Integer[] tg_ids){
@@ -87,6 +114,11 @@ public class GoodsController {
     }
 
 
+    /**
+     * 添加商品种类
+     * @param goodsType
+     * @return
+     */
     @RequestMapping("/addGoodsType")
     @ResponseBody
     public boolean addGoodsType(GoodsType goodsType){
@@ -94,6 +126,13 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 获取所有商品，分页操作，条件查询操作
+     * @param mv
+     * @param page
+     * @param goods
+     * @return
+     */
     @RequestMapping("/getGoods")
     public ModelAndView getGoods(ModelAndView mv,Page page,String goods){
         Goods key = null;
@@ -110,12 +149,22 @@ public class GoodsController {
         return mv;
     }
 
+    /**
+     * 获取所有商品种类名
+     * @return
+     */
     @RequestMapping("/getAllGoodsTypeName")
     @ResponseBody
     public List<String> getAllGoodsTypeName(){
         return goodsService.getAllGoodsTypeName();
     }
 
+    /**
+     * 添加商品
+     * @param goods
+     * @param goodsType
+     * @return
+     */
     @RequestMapping("/addGoods")
     @ResponseBody
     public boolean addGoods(Goods goods,GoodsType goodsType){
@@ -124,12 +173,23 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 获得需要修改商品
+     * @param g_id
+     * @return
+     */
     @RequestMapping("/getEditGoods")
     @ResponseBody
     public Goods getEditGoods(Integer g_id){
         return goodsService.getEditGoods(g_id);
     }
 
+    /**
+     * 修改商品
+     * @param goods
+     * @param goodsType
+     * @return
+     */
     @RequestMapping("/edit_goods")
     @ResponseBody
     public boolean edit_goods(Goods goods,GoodsType goodsType){
@@ -138,6 +198,11 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 商品删除（软删除）
+     * @param g_id
+     * @return
+     */
     @RequestMapping("/deleteGoods")
     @ResponseBody
     public boolean deleteGoods(Integer g_id){
@@ -145,6 +210,11 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 商品批量删除（软删除）
+     * @param g_ids
+     * @return
+     */
     @RequestMapping("/deleteGoodss")
     @ResponseBody
     public boolean deleteGoodss(Integer[] g_ids){
@@ -159,6 +229,13 @@ public class GoodsController {
         return true;
     }
 
+    /**
+     * 查询库存操作
+     * @param mv
+     * @param page
+     * @param goods_amount
+     * @return
+     */
     @RequestMapping("/get_goods_amount")
     @ResponseBody
     public ModelAndView get_goods_amount(ModelAndView mv,Page page,String goods_amount){
@@ -180,6 +257,12 @@ public class GoodsController {
         return mv;
     }
 
+    /**
+     * 获取库存警报列表
+     * @param mv
+     * @param page
+     * @return
+     */
     @RequestMapping("/get_goods_alarm")
     @ResponseBody
     public ModelAndView get_goods_alarm(ModelAndView mv,Page page){
@@ -194,6 +277,11 @@ public class GoodsController {
         return mv;
     }
 
+    /**
+     * 添加库存警告
+     * @param goods_alarm
+     * @return
+     */
     @RequestMapping("/add_goods_alarm")
     @ResponseBody
     public boolean add_goods_alarm(@RequestBody Goods_alarm goods_alarm){
@@ -201,6 +289,11 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 修改库存警报
+     * @param map
+     * @return
+     */
     @RequestMapping("/edit_goods_alarm")
     @ResponseBody
     public boolean edit_goods_alarm(@RequestBody Map<String,Object> map){
@@ -210,6 +303,11 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 删除库存警报
+     * @param g_id
+     * @return
+     */
     @RequestMapping("/delete_goods_alarm")
     @ResponseBody
     public boolean delete_goods_alarm(Integer g_id){
@@ -217,6 +315,11 @@ public class GoodsController {
         return bool;
     }
 
+    /**
+     * 批量删除库存警报
+     * @param g_ids
+     * @return
+     */
     @RequestMapping("/delete_goods_alarms")
     @ResponseBody
     public boolean delete_goods_alarms(Integer[] g_ids){

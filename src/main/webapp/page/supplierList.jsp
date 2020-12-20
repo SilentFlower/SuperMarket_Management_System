@@ -584,6 +584,7 @@
                     '            <td>\n' +
                     '            <span class="btn btn-primary change" data-toggle="modal" data-target="#editModal" >修改</span>\n' +
                     '            <span class="btn btn-danger delete" data-toggle="modal" data-target="#deleteModal">删除</span>\n' +
+                    '            <input type="hidden" value="'+item.s_id+'">'+
                     '            </td>\n' +
                     '        </tr>');
             });
@@ -603,13 +604,13 @@
         });
 
         $("body").on('click','.change',function () {
-            var supplier_name = $(this).parent().parent().find("td").eq(1).text();
+            var s_id = $(this).parent().find("input").val();
 
             $.ajax({
                 url:"${pageContext.request.contextPath}/supplier/getEditSupplier",
                 type: "POST",
                 dataType:"json",
-                data: 'supplier_name='+supplier_name,
+                data: 's_id='+s_id,
                 success:function (result) {
                    $("#editName").prop("value",result.supplier_name);
                    $("#editBankcard").prop("value",result.supplier_bankcard);
@@ -623,13 +624,13 @@
         });
 
         $("body").on('click','.delete',function () {
-            var supplier_name = $(this).parent().parent().find("td").eq(1).text();
+            var s_id = $(this).parent().find("input").val();
             $("body").off('click','#deleteSupplier').on('click','#deleteSupplier',function () {
                 $.ajax({
                     url:"${pageContext.request.contextPath}/supplier/deleteSupplier",
                     type: "POST",
                     dataType:"json",
-                    data: 'supplier_name='+supplier_name,
+                    data: 's_id='+s_id,
                     success:function (result) {
                         if(result == true){
                             alert("删除成功");
@@ -644,14 +645,14 @@
         });
 
         $("body").on('click','#deleteSupplier',function () {
-            var supplier_names = [];
+            var s_ids = [];
             ($('.delete').parent().parent().find("td input")).each(function (i,item) {
                 if($(this).prop("checked") == true){
-                    supplier_names.push($(this).parent().parent().find("td").eq(1).text());
+                    s_ids.push($(this).parent().parent().find("td").eq(7).find("input").val());
                 }
             });
 
-            if(supplier_names.length == 0){
+            if(s_ids.length == 0){
                 alert("未选择删除项");
                 $('#deleteModal').modal('hide');
             }else{
@@ -659,7 +660,7 @@
                     url:"${pageContext.request.contextPath}/supplier/deleteSuppliers",
                     type: "POST",
                     dataType:"json",
-                    data: 'supplier_names='+supplier_names,
+                    data: 's_ids='+s_ids,
                     success:function (result) {
                         if(result == true){
                             alert("删除成功");

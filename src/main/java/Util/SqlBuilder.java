@@ -99,7 +99,7 @@ public class SqlBuilder {
 
     public String goodsTypeKeyword(GoodsType goodsType){
         int count = 0;
-        StringBuilder sql = new StringBuilder("select * from type_goods where");
+        StringBuilder sql = new StringBuilder("select * from type_goods where is_delete = false and ");
         if(goodsType.getTg_id() != null){
             sql.append(" tg_id like CONCAT('%',#{tg_id},'%') ");
             count++;
@@ -127,7 +127,8 @@ public class SqlBuilder {
         int count = 0;
         StringBuilder sql = new StringBuilder("select * from goods a");
         if(goods.getGoodsType() != null){
-            sql.append(" left join type_goods b on a.tg_id = b.tg_id where tg_name like CONCAT('%',#{goodsType.tg_name},'%') ");
+            sql.append(" left join type_goods b on a.tg_id = b.tg_id where " +
+                    " a.is_delete = false and tg_name like CONCAT('%',#{goodsType.tg_name},'%') ");
             count++;
         }
         if(count <= 0){

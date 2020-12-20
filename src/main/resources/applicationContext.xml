@@ -32,4 +32,5 @@
 
     <import resource="spring-mail.xml"/>
 
+
 </beans>

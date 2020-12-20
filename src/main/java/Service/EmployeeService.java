@@ -13,17 +13,36 @@ import java.util.Map;
  */
 public interface EmployeeService {
 
+    /**
+     * 获取员工数据，以及分页查询，以及条件查询。
+     * @param page
+     * @param employee
+     * @return
+     */
     Map<String, Object> getEmployees(Page page, Employee employee);
 
-    public Integer getCount();
+    Integer getCount();
 
-    public Boolean addNewEmployee(Employee employee);
+    /**
+     * 增加新员工
+     * @param employee
+     * @return
+     */
+    Boolean addNewEmployee(Employee employee);
 
-    public Boolean editUser(Employee employee);
+    /**
+     * 修改员工数据
+     * @param employee
+     * @return
+     */
+    Boolean editUser(Employee employee);
 
-    public Employee findByEmail(String email);
+    /**
+     * 删除员工数据
+     * @param e_id
+     * @return
+     */
+    Boolean deleteOne(Integer e_id);
 
-    public Boolean deleteOne(String email);
-
-
+    Employee findById(Integer e_id);
 }

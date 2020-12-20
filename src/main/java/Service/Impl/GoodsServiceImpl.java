@@ -262,6 +262,7 @@ public class GoodsServiceImpl implements GoodsService {
         return false;
     }
 
+    //定时器，查看库存
     @Override
     @Scheduled(cron = "0 0/1 * * * ?")
     public void goods_timer() {
@@ -299,6 +300,7 @@ public class GoodsServiceImpl implements GoodsService {
 //        }
     }
 
+    //在启动前读取存储的警报商品
     @PostConstruct
     @Override
     public void goods_timer_load() {
@@ -308,6 +310,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
     }
 
+    //服务器关闭时将数据存到本地
     @PreDestroy
     @Override
     public void goods_timer_off() {

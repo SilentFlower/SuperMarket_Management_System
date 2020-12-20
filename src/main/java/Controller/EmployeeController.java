@@ -31,6 +31,13 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    /**
+     * 获取分页数据以及根据条件查询
+     * @param mv
+     * @param page
+     * @param employee
+     * @return
+     */
     @RequestMapping("/getEmployee")
     @ResponseBody
     public ModelAndView getEmployee(ModelAndView mv, Page page,String employee){
@@ -48,6 +55,12 @@ public class EmployeeController {
         return mv;
     }
 
+    /**
+     * 新增员工数据，绑定账户
+     * @param employee
+     * @param user
+     * @return
+     */
     @RequestMapping("/addNew")
     @ResponseBody
     public boolean addNew(Employee employee,User user){
@@ -57,6 +70,12 @@ public class EmployeeController {
     }
 
 
+    /**
+     * 修改数据
+     * @param employee
+     * @param user
+     * @return
+     */
     @RequestMapping("/edit")
     @ResponseBody
     public boolean edit(Employee employee, User user){
@@ -65,25 +84,40 @@ public class EmployeeController {
         return a;
     }
 
+    /**
+     * 获取到需要修改的数据
+     * @param e_id
+     * @return
+     */
     @RequestMapping("/getOne")
     @ResponseBody
-    public Employee getOne(ModelAndView mv,String email){
-        Employee employee = employeeService.findByEmail(email);
+    public Employee getOne(Integer e_id){
+        Employee employee = employeeService.findById(e_id);
         return employee;
     }
 
+    /**
+     * 删除一个员工数据
+     * @param e_id
+     * @return
+     */
     @RequestMapping("/deleteOne")
     @ResponseBody
-    public boolean deleteOne(String email){
-        Boolean d = employeeService.deleteOne(email);
+    public boolean deleteOne(Integer e_id){
+        Boolean d = employeeService.deleteOne(e_id);
         return d;
     }
 
+    /**
+     * 删除多行员工数据
+     * @param e_ids
+     * @return
+     */
     @RequestMapping("/deleteAll")
     @ResponseBody
-    public boolean deleteAll(String[] emails){
-        for (String email : emails) {
-            Boolean a = employeeService.deleteOne(email);
+    public boolean deleteAll(Integer[] e_ids){
+        for (Integer e_id : e_ids) {
+            Boolean a = employeeService.deleteOne(e_id);
             if(a){
                 continue;
             }else {

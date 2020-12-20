@@ -73,8 +73,8 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public Supplier getEditSupplier(String supplier_name) {
-        return supplierDao.findByName(supplier_name);
+    public Supplier getEditSupplier(Integer s_id) {
+        return supplierDao.findById(s_id);
     }
 
     @Override
@@ -88,9 +88,22 @@ public class SupplierServiceImpl implements SupplierService {
         }
     }
 
+    /**
+     * 删除需要级联 影响supply_goods 和 goods的库存
+     * @param s_id
+     * @return
+     */
     @Override
-    public Boolean deleteSupplier(String supplier_name) {
-        Integer integer = supplierDao.deleteSupplier(supplier_name);
+    public Boolean deleteSupplier(Integer s_id) {
+        Integer integer = supplierDao.deleteSupplier(s_id);
+        //根据ID查询所有的进货表
+        List<SupplierGoods> supplierGoods = supplierGoodsDao.findBy_s_id(s_id);
+        //删除表supplierGoods内容
+        supplierGoodsDao.delete_supplierGoods_s_id(s_id);
+        //更新goods库存
+        for (SupplierGoods supplierGood : supplierGoods) {
+            Integer integer1 = goodsDao.update_amount_min(supplierGood.getG_id(), supplierGood.getSg_amount());
+        }
         if(integer > 0){
             return true;
         }
@@ -122,6 +135,11 @@ public class SupplierServiceImpl implements SupplierService {
         return map;
     }
 
+    /**
+     * 级联更新goods
+     * @param supplierGoods
+     * @return
+     */
     @Override
     public Boolean add_supplierGoods(SupplierGoods supplierGoods) {
         Integer g_id = goodsDao.findIdByName(supplierGoods.getGoods().getGoods_name());
@@ -130,6 +148,8 @@ public class SupplierServiceImpl implements SupplierService {
         supplierGoods.setS_id(s_id);
         Integer integer = supplierGoodsDao.add_supplierGoods(supplierGoods);
         if(integer > 0){
+            //增加库存
+            goodsDao.update_amount_plus(supplierGoods.getG_id(), supplierGoods.getSg_amount());
             return true;
         }
         return false;
@@ -189,6 +209,11 @@ public class SupplierServiceImpl implements SupplierService {
         if(bool){
             Integer integer = supplierGoodsDao.update_supplierGoods(supplierGoods);
             if(integer > 0){
+                //级联更新  根据g_id变化和数量变化
+                if(!before.getG_id().equals(supplierGoods.getG_id()) || !before.getSg_amount().equals(supplierGoods.getSg_amount())){
+                    goodsDao.update_amount_min(before.getG_id(), before.getSg_amount());
+                    goodsDao.update_amount_plus(supplierGoods.getG_id(), supplierGoods.getSg_amount());
+                }
                 return true;
             }
         }
@@ -197,10 +222,17 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
 
+    /**
+     * 级联删除
+     * @param sg_id
+     * @return
+     */
     @Override
     public Boolean delete_supplierGoods(Integer sg_id) {
         Integer integer = supplierGoodsDao.delete_supplierGoods(sg_id);
+        SupplierGoods delete = supplierGoodsDao.getById(sg_id);
         if(integer > 0){
+            goodsDao.update_amount_min(delete.getG_id(), delete.getSg_amount());
             return true;
         }
         return false;

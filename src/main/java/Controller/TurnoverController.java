@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
-/**
+/**营业额，别名为库存盘点
  * @author SiletFlower
  * @date 2020/12/16 22:42:21
  * @description

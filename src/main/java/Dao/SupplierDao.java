@@ -46,8 +46,8 @@ public interface SupplierDao {
 
 
     //可能需要联表删除
-    @Delete("delete from supplier where supplier_name = #{supplier_name}")
-    public Integer deleteSupplier(String supplier_name);
+    @Delete("delete from supplier where s_id = #{s_id}")
+    public Integer deleteSupplier(Integer s_id);
 
     @SelectProvider(type = SqlBuilder.class,method = "supplierKeyword")
     public List<Supplier> searchByKey(Supplier key);

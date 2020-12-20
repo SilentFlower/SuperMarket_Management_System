@@ -35,7 +35,7 @@ public interface EmployeeDao {
 
     @Insert("insert into employee(employee_name,employee_sex,employee_addr,employee_tel,employee_email,u_id) " +
             "values(#{employee_name},#{employee_sex},#{employee_addr},#{employee_tel},#{employee_email},#{u_id})")
-    public void addEmployee(Employee employee);
+    public Integer addEmployee(Employee employee);
 
     @Select("select * from employee where e_id = #{e_id}")
     @Results({
@@ -49,10 +49,11 @@ public interface EmployeeDao {
 
     @Update("update employee set employee_name = #{employee_name}, employee_sex = #{employee_sex}, " +
             "employee_addr = #{employee_addr}, employee_tel = #{employee_tel}, employee_email = #{employee_email}" +
-            "where u_id = #{u_id}")
-    public void updateEmployee(Employee employee);
+            "where e_id = #{e_id}")
+    public Integer updateEmployee(Employee employee);
 
     @Delete("delete from employee where e_id = #{e_id}")
+
     public Integer deleteById(Integer e_id);
 
 
@@ -62,7 +63,7 @@ public interface EmployeeDao {
             @Result(property = "u_id", column = "u_id"),
             @Result(property = "user.u_id", column = "u_id"),
             @Result(property = "user.password", column = "password"),
-            @Result(property = "user.isAdmin", column = "isAdmin")
+            @Result(property = "user.admin", column = "admin")
     })
     public List<Employee> searchByKey(Employee employee);
 

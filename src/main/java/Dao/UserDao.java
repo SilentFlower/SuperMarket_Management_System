@@ -4,6 +4,7 @@ import Domain.User;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,8 +15,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserDao {
 
-    @Insert("insert into user (user_name,password,isAdmin) values(#{user_name},#{password},#{isAdmin})")
-    public void addNewUser(User user);
+    @Insert("insert into user (user_name,password,admin) values(#{user_name},#{password},#{admin})")
+    public Integer addNewUser(User user);
 
     @Select("select u_id from user where user_name = #{name}")
     public Integer findIdByName(String name);
@@ -26,9 +27,12 @@ public interface UserDao {
     @Select("select * from user where u_id = #{id}")
     public User findById(Integer id);
 
-    @Select("update user set password = #{password}, isAdmin = #{isAdmin} where user_name = #{user_name}")
-    public void updateUser(User user);
+    @Update("update user set password = #{password}, admin = #{admin} where user_name = #{user_name}")
+    public Integer updateUser(User user);
 
     @Delete("delete from user where u_id = #{u_id}")
     public Integer deleteById(Integer u_id);
+
+    @Update("update user set admin = #{admin} where user_name = #{user_name}")
+    Integer updateAdmin(User user);
 }

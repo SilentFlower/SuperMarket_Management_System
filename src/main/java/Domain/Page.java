@@ -6,7 +6,7 @@ package Domain;
  * @description
  */
 public class Page {
-    private Integer pageSize = 1;
+    private Integer pageSize = 10;
     private Integer pageCount;
     private Integer currentPage = 1;
     private Integer Count = 0;

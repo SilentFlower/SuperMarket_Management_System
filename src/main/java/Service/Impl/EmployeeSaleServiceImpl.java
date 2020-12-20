@@ -64,18 +64,30 @@ public class EmployeeSaleServiceImpl implements EmployeeSaleService{
     @Override
     public Boolean add_employeeSale(SaleGoods saleGoods) {
         Boolean bool = employeeSaleDao.add_employeeSale(saleGoods);
+        if (bool){
+            goodsDao.update_amount_min(saleGoods.getG_id(), saleGoods.getSale_amount());
+        }
         return bool;
     }
 
     @Override
     public Boolean edit_employeeSale(SaleGoods saleGoods) {
+        SaleGoods before = employeeSaleDao.getById(saleGoods.getSale_id());
+        if(!before.getSale_amount().equals(saleGoods.getSale_amount()) || before.getG_id() != saleGoods.getG_id()){
+            goodsDao.update_amount_plus(before.getG_id(), before.getSale_amount());
+            goodsDao.update_amount_min(saleGoods.getG_id(), saleGoods.getSale_amount());
+        }
         Boolean bool = employeeSaleDao.edit_employeeSale(saleGoods);
         return bool;
     }
 
     @Override
     public Boolean delete_employeeSale(Integer sale_id) {
+        SaleGoods saleGoods = employeeSaleDao.getById(sale_id);
         Boolean bool = employeeSaleDao.delete_employeeSale(sale_id);
+        if(bool){
+            goodsDao.update_amount_plus(saleGoods.getG_id(), saleGoods.getSale_amount());
+        }
         return bool;
     }
 }

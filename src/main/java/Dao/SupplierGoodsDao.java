@@ -72,4 +72,25 @@ public interface SupplierGoodsDao {
             @Result(property = "supplier",column = "s_id", one = @One(select = "Dao.SupplierDao.findById"))
     })
     public List<SupplierGoods> getUnpaidBy_s_id(Integer s_id);
+
+    @Select("select * from supply_goods where s_id = #{s_id}")
+    @Results({
+            @Result(property = "g_id",column = "g_id"),
+            @Result(property = "s_id",column = "s_id"),
+            @Result(property = "goods",column = "g_id", one = @One(select = "Dao.GoodsDao.findById")),
+            @Result(property = "supplier",column = "s_id", one = @One(select = "Dao.SupplierDao.findById"))
+    })
+    public List<SupplierGoods> findBy_s_id(Integer s_id);
+
+    @Delete("delete from supply_goods where s_id = #{s_id} ")
+    Integer delete_supplierGoods_s_id(Integer s_id);
+
+    @Select("select * from where sg_id = #{sg_id}")
+    @Results({
+            @Result(property = "g_id",column = "g_id"),
+            @Result(property = "s_id",column = "s_id"),
+            @Result(property = "goods",column = "g_id", one = @One(select = "Dao.GoodsDao.findById")),
+            @Result(property = "supplier",column = "s_id", one = @One(select = "Dao.SupplierDao.findById"))
+    })
+    SupplierGoods getById(Integer sg_id);
 }

@@ -228,6 +228,8 @@
     </ul>
 </div>
 <script>
+
+
     $(".need").click(function () {
         if($(this).hasClass("click")){
             $(this).removeClass("click");

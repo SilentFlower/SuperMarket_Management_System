@@ -7,6 +7,22 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<script>
+    function getToken1(){
+        var name = "token" + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++)
+        {
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+        }
+        return "";
+    }
+    var token = getToken1();
+    if(token == '' || token == null){
+        location.href = "${pageContext.request.contextPath}/utils/goLogin";
+    }
+</script>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>首页</title>

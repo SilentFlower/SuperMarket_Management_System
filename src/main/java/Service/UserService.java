@@ -9,4 +9,5 @@ import Domain.User;
  */
 public interface UserService {
 
+    User getUserInfo(String token);
 }

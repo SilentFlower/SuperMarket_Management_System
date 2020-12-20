@@ -34,6 +34,13 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
 
+    /**
+     * 分页查询供应商，按条件分类查询供应商
+     * @param page
+     * @param mv
+     * @param supplier
+     * @return
+     */
     @RequestMapping("/getSuppliers")
     public ModelAndView getSuppliers(Page page, ModelAndView mv,String supplier){
         Supplier key = null;
@@ -50,6 +57,11 @@ public class SupplierController {
         return mv;
     }
 
+    /**
+     * 新增供应商
+     * @param supplier
+     * @return
+     */
     @RequestMapping("addSupplier")
     @ResponseBody
     public boolean addSupplier(Supplier supplier){
@@ -57,13 +69,23 @@ public class SupplierController {
         return bool;
     }
 
+    /**
+     * 获取到需要修改的供应商
+     * @param s_id
+     * @return
+     */
     @RequestMapping("getEditSupplier")
     @ResponseBody
-    public Supplier getEditSupplier(String supplier_name){
-        Supplier supplier = supplierService.getEditSupplier(supplier_name);
+    public Supplier getEditSupplier(Integer s_id){
+        Supplier supplier = supplierService.getEditSupplier(s_id);
         return supplier;
     }
 
+    /**
+     * 修改供应商
+     * @param supplier
+     * @return
+     */
     @RequestMapping("editSupplier")
     @ResponseBody
     public boolean editSupplier(Supplier supplier){
@@ -71,19 +93,28 @@ public class SupplierController {
         return bool;
     }
 
+    /**
+     * 删除供应商
+     * @param s_id
+     * @return
+     */
     @RequestMapping("/deleteSupplier")
     @ResponseBody
-    public boolean deleteSupplier(String supplier_name){
-        System.out.println(supplier_name);
-        supplierService.deleteSupplier(supplier_name);
-        return true;
+    public boolean deleteSupplier(Integer s_id){
+        Boolean b = supplierService.deleteSupplier(s_id);
+        return b;
     }
 
+    /**
+     * 批量删除供货商
+     * @param s_ids
+     * @return
+     */
     @RequestMapping("/deleteSuppliers")
     @ResponseBody
-    public boolean deleteSuppliers(String[] supplier_names){
-        for (String supplier_name : supplier_names) {
-            if(supplierService.deleteSupplier(supplier_name)){
+    public boolean deleteSuppliers(Integer[] s_ids){
+        for (Integer s_id : s_ids) {
+            if(supplierService.deleteSupplier(s_id)){
                 continue;
             }else {
                 return false;
@@ -92,6 +123,15 @@ public class SupplierController {
         return true;
     }
 
+    /**
+     * 获取供货记录，条件查询，分页查询
+     * @param mv
+     * @param page
+     * @param supplierGoods
+     * @param endTime
+     * @return
+     * @throws ParseException
+     */
     @RequestMapping("/supplierGoods")
     public ModelAndView supplierGoods(ModelAndView mv,Page page,String supplierGoods,String endTime) throws ParseException {
         SupplierGoods key = null;
@@ -115,6 +155,13 @@ public class SupplierController {
         return mv;
     }
 
+    /**
+     * 新增进货记录
+     * @param supplierGoods
+     * @param supplier
+     * @param goods
+     * @return
+     */
     @RequestMapping("/add_supplierGoods")
     @ResponseBody
     public boolean add_supplierGoods(SupplierGoods supplierGoods, Supplier supplier, Goods goods) {
@@ -124,6 +171,11 @@ public class SupplierController {
         return bool;
     }
 
+    /**
+     * 获取所有商品和种类
+     * @param mv
+     * @return
+     */
     @RequestMapping("/get_goodsAndType")
     @ResponseBody
     public Map<String, Object> getGoodsAndType(ModelAndView mv){
@@ -131,6 +183,11 @@ public class SupplierController {
         return map;
     }
 
+    /**
+     * 根据商品名获取商品种类
+     * @param goods_name
+     * @return
+     */
     @RequestMapping(value = "/get_goodsType",produces = {"text/html;charset=UTF-8"})
     @ResponseBody
     public String getGoodsType(String goods_name){
@@ -138,6 +195,11 @@ public class SupplierController {
         return name;
     }
 
+    /**
+     * 根据ID获取供货记录
+     * @param sg_id
+     * @return
+     */
     @RequestMapping("get_editSupplierGoods")
     @ResponseBody
     public SupplierGoods getSupplierGoods(Integer sg_id){
@@ -145,6 +207,13 @@ public class SupplierController {
         return  supplierGoods;
     }
 
+    /**
+     * 根据id修改供货记录
+     * @param supplierGoods
+     * @param goods
+     * @param supplier
+     * @return
+     */
     @RequestMapping("edit_supplierGoods")
     @ResponseBody
     public boolean edit_supplierGoods(SupplierGoods supplierGoods,Goods goods,Supplier supplier){
@@ -154,6 +223,11 @@ public class SupplierController {
         return bool;
     }
 
+    /**
+     * 删除供货记录
+     * @param sg_id
+     * @return
+     */
     @RequestMapping("/delete_supplierGoods")
     @ResponseBody
     public boolean delete_supplierGoods(Integer sg_id){
@@ -161,6 +235,11 @@ public class SupplierController {
         return bool;
     }
 
+    /**
+     * 批量删除供货记录
+     * @param sg_ids
+     * @return
+     */
     @RequestMapping("/delete_supplierGoodss")
     @ResponseBody
     public boolean delete_supplierGoodss(Integer[] sg_ids){
@@ -175,6 +254,11 @@ public class SupplierController {
         return true;
     }
 
+    /**
+     * 支付未支付的供货记录
+     * @param sg_ids
+     * @return
+     */
     @RequestMapping("/pay_supplierGoods")
     @ResponseBody
     public boolean pay_supplierGoodss(Integer[] sg_ids){
@@ -189,6 +273,14 @@ public class SupplierController {
         return true;
     }
 
+    /**
+     * 获取所有供货商账单，包括分页操作，查询操作
+     * @param mv
+     * @param page
+     * @param supplier_bill
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/get_supplierBill")
     @ResponseBody
     public ModelAndView get_supplierBill(ModelAndView mv,Page page,String supplier_bill) throws IOException {
@@ -208,6 +300,11 @@ public class SupplierController {
         return mv;
     }
 
+    /**
+     * 根据供货商ID获取支付账单
+     * @param s_id
+     * @return
+     */
     @RequestMapping("/get_paySupplierBill")
     @ResponseBody
     public List<SupplierGoods> get_paySupplierBill(Integer s_id){
@@ -215,6 +312,11 @@ public class SupplierController {
         return paySupplierBill;
     }
 
+    /**
+     * 根据多个供货商ID 批量获取支付账单
+     * @param s_ids
+     * @return
+     */
     @RequestMapping("/get_paySupplierBills")
     @ResponseBody
     public List<SupplierGoods> get_paySupplierBills(Integer[] s_ids){
