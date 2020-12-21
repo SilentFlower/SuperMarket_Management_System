@@ -37,7 +37,11 @@ public class ObjectSaveUtil {
         FileInputStream fis = null;
         ObjectInputStream in = null;
         try {
-            fis = new FileInputStream("../save_alarm.txt");
+            File file = new File("../save_alarm.txt");
+            if(!file.exists()){
+                file.createNewFile();
+            }
+            fis = new FileInputStream(file);
             in = new ObjectInputStream(fis);
             Object o = in.readObject();
             if(fis != null){
