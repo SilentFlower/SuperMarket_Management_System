@@ -505,7 +505,7 @@
 
     <script>
         var cho = [];//已经选择的字段
-        function x() {
+        function x1() {
             $("#addModal").bootstrapValidator({
                 submitButtons:'#addNew',
                 message: '验证失败',

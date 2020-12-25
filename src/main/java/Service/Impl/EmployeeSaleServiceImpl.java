@@ -41,7 +41,7 @@ public class EmployeeSaleServiceImpl implements EmployeeSaleService{
         int end = start + page.getPageSize();
         Page newPage = null;
         List<Goods> all = goodsDao.findAll();
-        List<Employee> all2 = employeeDao.findAll();
+        List<Employee> all2 = employeeDao.findAll2();
         if(key == null){
             Integer count = employeeSaleDao.findCount();
             newPage = PageUtil.dealWithPage(page, count);

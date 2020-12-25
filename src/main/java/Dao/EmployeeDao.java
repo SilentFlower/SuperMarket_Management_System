@@ -77,4 +77,7 @@ public interface EmployeeDao {
             @Result(property = "user",column = "u_id",javaType = User.class,one = @One(select = "Dao.UserDao.findById"))
     })
     public List<Employee> findAll();
+
+    @Select("select * from employee")
+    public List<Employee> findAll2();
 }

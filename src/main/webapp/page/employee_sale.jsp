@@ -525,7 +525,7 @@
 </body>
 
     <script>
-        function x() {
+        function x1() {
             $("#addModal").bootstrapValidator({
                 submitButtons:'#addNew',
                 message: '验证失败',

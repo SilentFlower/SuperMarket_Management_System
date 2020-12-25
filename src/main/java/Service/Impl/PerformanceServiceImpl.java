@@ -33,7 +33,7 @@ public class PerformanceServiceImpl implements PerformanceService {
         int end = start + page.getPageSize();
         List<Performance> performance = performanceDao.get_performance(start, page.getPageSize(), key);
         Integer count = performanceDao.getCount();
-        List<Employee> allEmployees = employeeDao.findAll();
+        List<Employee> allEmployees = employeeDao.findAll2();
         Page newPage = PageUtil.dealWithPage(page, count);
         map.put("performance", performance);
         map.put("allEmployees", allEmployees);
