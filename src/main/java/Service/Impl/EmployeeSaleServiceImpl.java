@@ -45,7 +45,7 @@ public class EmployeeSaleServiceImpl implements EmployeeSaleService{
         if(key == null){
             Integer count = employeeSaleDao.findCount();
             newPage = PageUtil.dealWithPage(page, count);
-            saleGoods = employeeSaleDao.findByPage(start, end);
+            saleGoods = employeeSaleDao.findByPage(start, page.getPageSize());
         }else{
             saleGoods = employeeSaleDao.findByKey(key);
             newPage = PageUtil.dealWithPage(page, saleGoods.size());
@@ -63,6 +63,10 @@ public class EmployeeSaleServiceImpl implements EmployeeSaleService{
 
     @Override
     public Boolean add_employeeSale(SaleGoods saleGoods) {
+        Employee byId = employeeDao.findById(saleGoods.getE_id());
+        if(byId == null){
+            return false;
+        }
         Boolean bool = employeeSaleDao.add_employeeSale(saleGoods);
         if (bool){
             goodsDao.update_amount_min(saleGoods.getG_id(), saleGoods.getSale_amount());

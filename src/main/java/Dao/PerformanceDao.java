@@ -19,5 +19,9 @@ public interface PerformanceDao {
     @Results({
             @Result(property = "employee",column = "e_id",one = @One(select = "Dao.EmployeeDao.findById"))
     })
-    List<Performance> get_performance(@Param("start") Integer start, @Param("end") Integer end, @Param("performance") Performance performance);
+    List<Performance> get_performance(@Param("start") Integer start, @Param("size") Integer size, @Param("performance") Performance performance);
+
+    @Select("select count(*)\n" +
+            "from (select * from sale_goods group by e_id) s")
+    Integer getCount();
 }

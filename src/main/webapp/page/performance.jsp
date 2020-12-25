@@ -393,6 +393,7 @@
 
     function get_key(){
         var key = ${performanceKey};
+        $("#submit input").eq("0").prop("value", JSON.stringify(key));
         if(key != null){
             if(key["e_id"] != null){
                 allEmployees = ${allEmployees};
@@ -463,7 +464,7 @@
     $("#search_employee_name").change(function () {
         var e_id = $(this).val();
         $("#e_id").prop("value", e_id);
-        var allEmployees = ${allEmployees};
+        var allEmployees = ${allEmployees};`    `
         for(i in allEmployees){
             if(allEmployees[i].e_id == e_id){
                 $(this).prop("value", allEmployees[i].employee_name);

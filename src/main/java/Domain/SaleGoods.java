@@ -124,4 +124,21 @@ public class SaleGoods {
     public void setSale_price(Double sale_price) {
         this.sale_price = sale_price;
     }
+
+    @Override
+    public String toString() {
+        return "SaleGoods{" +
+                "sale_id=" + sale_id +
+                ", g_id=" + g_id +
+                ", e_id=" + e_id +
+                ", sale_amount=" + sale_amount +
+                ", sale_date=" + sale_date +
+                ", sale_date_string='" + sale_date_string + '\'' +
+                ", sale_price=" + sale_price +
+                ", goods=" + goods +
+                ", employee=" + employee +
+                ", startSearchTime='" + startSearchTime + '\'' +
+                ", endSearchTime='" + endSearchTime + '\'' +
+                '}';
+    }
 }

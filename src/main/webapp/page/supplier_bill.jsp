@@ -687,7 +687,7 @@
                         supplier_bill["supplier"] = supplier;
                     } else if (key == "sb_start_string") {
                         supplier_bill[key] = value;
-                        if(typeof endtime && "undefined" && endtime == null && endtime == ""){
+                        if(typeof endtime != "undefined" && endtime != null && endtime != ""){
                             supplier_bill["sb_end_string"] = endtime;
                         }
                     } else {

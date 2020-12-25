@@ -409,7 +409,7 @@ public class SqlBuilder {
         return sql.toString();
     }
 
-    public String get_Turnover(@Param("start") Integer start,@Param("end") Integer end,@Param("turnover") Turnover turnover){
+    public String get_Turnover(@Param("start") Integer start,@Param("size") Integer size,@Param("turnover") Turnover turnover){
         int count = 0;
         StringBuilder sql = new StringBuilder(" select g_id,sum(sale_price) as turnover," +
                                               " sum(sale_amount) as amount from sale_goods ");
@@ -433,11 +433,11 @@ public class SqlBuilder {
                 sql.append(" g_id = #{turnover.g_id} ");
             }
         }
-        sql.append(" group by g_id limit #{start},#{end}");
+        sql.append(" group by g_id limit #{start},#{size}");
         return sql.toString();
     }
 
-    public String get_performance(@Param("start") Integer start,@Param("end") Integer end,@Param("performance") Performance performance){
+    public String get_performance(@Param("start") Integer start,@Param("size") Integer size,@Param("performance") Performance performance){
         int count = 0;
         StringBuilder sql = new StringBuilder(" select e_id,sum(sale_price) as performance," +
                 " sum(sale_amount) as amount from sale_goods ");
@@ -461,7 +461,7 @@ public class SqlBuilder {
                 sql.append(" e_id = #{performance.e_id} ");
             }
         }
-        sql.append(" group by e_id limit #{start},#{end}");
+        sql.append(" group by e_id limit #{start},#{size}");
         return sql.toString();
     }
 }

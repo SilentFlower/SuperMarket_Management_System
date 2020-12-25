@@ -254,7 +254,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     //定时器，查看库存
     @Override
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/2 * * * *")
     public void goods_timer() {
         StringBuilder builder = new StringBuilder();
         Boolean bool = false;
@@ -276,17 +276,21 @@ public class GoodsServiceImpl implements GoodsService {
             if(goods.getGoods_amount() < low){
                 bool = true;
                 builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存小于<strong> "+low+"</strong>，请及时调整。");
+                builder.append("</br>");
             }else if(goods.getGoods_amount() > high){
                 bool = true;
                 builder.append("商品 <strong>"+goods.getGoods_name()+"</strong> 库存大于<strong> "+high+"</strong>，请及时调整。");
+                builder.append("</br>");
             }
-            if(true){
-                String message = EmailTemplateUtil.emailTemplate(builder.toString());
-                mailUtil.sendMail(message ,to,"库存警报");
-                bool = false;
-            }else{
-                continue;
-            }
+        }
+        if(bool){
+            String message = EmailTemplateUtil.emailTemplate(builder.toString());
+            mailUtil.sendMail(message ,to,"库存警报");
+        }
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

@@ -21,14 +21,10 @@ import javax.mail.internet.MimeMessage;
  * @date 2020/12/13 20:55:14
  * @description
  */
-@Component
 public class MailUtil {
 
     @Autowired
     private JavaMailSender Javamail;
-
-    @Value("${mail.fromAddress}")
-    private  String from;
 
     @SneakyThrows
     public void sendMail(String message, String to, String subject){

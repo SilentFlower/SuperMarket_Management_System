@@ -33,9 +33,10 @@ public class TurnoverServiceImpl implements TurnoverService {
         Map map = new HashMap();
         int start = (page.getCurrentPage() - 1) * page.getPageSize();
         int end = start + page.getPageSize();
-        List<Turnover> turnover = turnoverDao.get_Turnover(start, end, key);
+        List<Turnover> turnover = turnoverDao.get_Turnover(start, page.getPageSize(), key);
         List<Goods> allGoods = goodsDao.findAll();
-        Page newPage = PageUtil.dealWithPage(page, turnover.size());
+        Integer count = turnoverDao.getCount();
+        Page newPage = PageUtil.dealWithPage(page, count);
         map.put("turnover", turnover);
         map.put("allGoods", allGoods);
         map.put("page", newPage);

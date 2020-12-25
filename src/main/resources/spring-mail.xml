@@ -22,6 +22,8 @@
         </property>
     </bean>
 
+    <bean class="Util.MailUtil" id="mailUtil"/>
+
     <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${mail.smtpHost}" />
         <property name="port" value="${mail.port}" />
@@ -31,6 +33,9 @@
         <property name="javaMailProperties">
             <props>
                 <prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+                <prop key="mail.smtp.starttls.enable">${mail.smtp.starttls.enable}</prop>
+                <prop key="mail.smtp.starttls.required">${mail.smtp.starttls.required}</prop>
+                <prop key="mail.smtp.ssl.enable">${mail.smtp.ssl.enable}</prop>
             </props>
         </property>
     </bean>

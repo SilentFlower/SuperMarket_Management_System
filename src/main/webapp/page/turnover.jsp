@@ -395,6 +395,8 @@
 
     function get_key(){
         var key = ${turnoverKey};
+        console.log(key);
+        $("#submit input").eq("0").prop("value", JSON.stringify(key));
         if(key != null){
             if(key["g_id"] != null){
                 allGoods = ${allGoods};

@@ -18,14 +18,14 @@ public interface EmployeeSaleDao {
     @Select("select count(sale_id) from sale_goods")
     Integer findCount();
 
-    @Select("select * from sale_goods limit #{start},#{end}")
+    @Select("select * from sale_goods limit #{start},#{size}")
     @Results({
             @Result(property ="g_id" ,column ="g_id" ),
             @Result(property ="e_id" ,column ="e_id" ),
             @Result(property ="goods" ,column ="g_id",one = @One(select = "Dao.GoodsDao.findById")),
             @Result(property ="employee" ,column ="e_id",one = @One(select = "Dao.EmployeeDao.findById"))
     })
-    List<SaleGoods> findByPage(@Param("start") int start, @Param("end") int end);
+    List<SaleGoods> findByPage(@Param("start") int start, @Param("size") int size);
 
 
     @Insert("insert into sale_goods (g_id,e_id,sale_amount,sale_date,sale_price)" +

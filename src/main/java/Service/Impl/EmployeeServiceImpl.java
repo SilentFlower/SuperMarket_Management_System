@@ -10,6 +10,8 @@ import Util.MD5Util;
 import Util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -78,6 +80,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return
      */
     @Override
+    @Transactional(propagation= Propagation.REQUIRED)
     public Boolean addNewEmployee(Employee employee) {
         //首先查找email是否重复
         Employee find1 = employeeDao.findByEmail(employee.getEmployee_email());

@@ -20,6 +20,8 @@ public interface TurnoverDao {
     @Results({
             @Result(property = "goods",column = "g_id",one = @One(select = "Dao.GoodsDao.findById"))
     })
-    List<Turnover> get_Turnover(@Param("start") Integer start,@Param("end") Integer end,@Param("turnover") Turnover turnover);
+    List<Turnover> get_Turnover(@Param("start") Integer start,@Param("size") Integer size,@Param("turnover") Turnover turnover);
 
+    @Select("select count(*) from sale_goods")
+    Integer getCount();
 }
