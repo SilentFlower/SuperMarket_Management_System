@@ -403,8 +403,8 @@
         var bool = false;
 
         $(function () {
-            page();
             getSupplier_bill();
+            page();
             getSupplier();
             getKey();
         });

@@ -638,9 +638,9 @@
         var choose_sale_id=""
 
         $(function () {
-            getKey();
-            page();
             getEmployee_sale();
+            page();
+            getKey();
             get_allGoods_info();
             get_allEmployees_info();
             x1();

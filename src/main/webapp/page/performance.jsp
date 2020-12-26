@@ -316,9 +316,9 @@
     var bool = false;
 
     $(function () {
+        get_performance();
         page();
         get_key();
-        get_performance();
         get_employee();
     });
 

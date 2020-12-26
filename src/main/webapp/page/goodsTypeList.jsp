@@ -456,9 +456,9 @@
         }
 
         $(function () {
-            getKey();
             page();
             getGoodsType();
+            getKey();
             x();
             x2();
         });

@@ -505,8 +505,8 @@
         }
 
         $(function () {
-            page();
             get_goods_alarm();
+            page();
             get_alarm_info();
             x();
             x2();

@@ -587,9 +587,9 @@
         }
 
         $(function () {
-            getKey();
-            page();
             getSupplier();
+            page();
+            getKey();
             x();
             x2();
         });

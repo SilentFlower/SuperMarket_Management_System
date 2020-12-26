@@ -602,9 +602,9 @@
             });
         }
         $(function () {
-            getKey();
-            page();
             getEmployee();
+            page();
+            getKey();
             x1();
             x2();
         });

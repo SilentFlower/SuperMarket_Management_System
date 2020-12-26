@@ -579,9 +579,9 @@
         }
 
         $(function () {
-            getKey();
-            page();
             getGoods();
+            page();
+            getKey();
             x();
             x2();
         });

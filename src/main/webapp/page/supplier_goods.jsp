@@ -664,9 +664,9 @@
         }
 
         $(function () {
-            getKey();
             page();
             getSupplierGoods();
+            getKey();
             x();
             x2();
         });

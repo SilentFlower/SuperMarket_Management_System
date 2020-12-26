@@ -305,8 +305,8 @@
     <script>
 
         $(function () {
-            page();
             get_goods_amount();
+            page();
             get_goods_info();
             get_goods_amount_key();
         });

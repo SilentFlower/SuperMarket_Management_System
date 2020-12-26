@@ -317,9 +317,9 @@
     var bool = false;
 
     $(function () {
+        get_turnover();
         page();
         get_key();
-        get_turnover();
         get_goods();
     });
 
